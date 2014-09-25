@@ -94,7 +94,7 @@ subset2_(mtcars, "mpg > 31")
 
 ## Non-standard evaluation
 
-With the standard evaluation version in hand, writing the standard evaluation version is easy. We just use `lazy()` to capture the unevaluated expression and corresponding environment:
+With the standard evaluation version in hand, writing the non-standard evaluation version is easy. We just use `lazy()` to capture the unevaluated expression and corresponding environment:
 
 ```{r}
 subset2 <- function(df, condition) {
