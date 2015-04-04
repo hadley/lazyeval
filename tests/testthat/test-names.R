@@ -14,5 +14,5 @@ test_that("all_dots changes names to utf-8 in Windows (#29)", {
   all_dots <- all_dots(dots, 中='cn')
 
   expect_equal(Encoding(names(dots)), Encoding(names(list1)))
-  expect_equal(Encoding(names(all_dots)), c(Encoding(names(list1)), Encoding(names(list2))))
-}
+  expect_equal(Encoding(names(all_dots)), Encoding(names(c(list2, list1))))
+})
