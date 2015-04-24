@@ -33,7 +33,11 @@ lazy_dots <- function(..., .follow_symbols = FALSE) {
     return(structure(list(), class = "lazy_dots"))
   }
 
-  .Call(make_lazy_dots, environment(), .follow_symbols)
+  res <- .Call(make_lazy_dots, environment(), .follow_symbols)
+  if (length(res) > 0 && identical(res[[length(res)]]$expr, missing_arg())) {
+    res[[length(res)]] <- NULL
+  }
+  res
 }
 
 is.lazy_dots <- function(x) inherits(x, "lazy_dots")
