@@ -10,3 +10,13 @@ test_that("lazy_dots works with no args", {
   expect_equal(l2, structure(list(), class = "lazy_dots"))
 
 })
+
+test_that("lazy_dots gobble empty last argument", {
+
+  l1 <- lazy_dots(1,)
+  l2 <- lazy_dots(1, 2, .follow_symbols = TRUE)
+
+  expect_equal(l1, lazy_dots(1))
+  expect_equal(l2, lazy_dots(1, 2, .follow_symbols = TRUE))
+
+})
