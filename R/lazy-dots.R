@@ -46,9 +46,14 @@ lazy_dots <- function(..., .follow_symbols = FALSE,
 
   res <- .Call(make_lazy_dots, environment(), .follow_symbols)
   if (.drop_last_if_empty) {
-    if (length(res) > 0 && identical(res[[length(res)]]$expr, missing_arg())) {
-      res[[length(res)]] <- NULL
-    }
+    res <- drop_last_if_empty(res)
+  }
+  res
+}
+
+drop_last_if_empty <- function(res) {
+  if (length(res) > 0 && identical(res[[length(res)]]$expr, missing_arg())) {
+    res[[length(res)]] <- NULL
   }
   res
 }
