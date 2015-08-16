@@ -90,13 +90,15 @@ as.lazy_dots.lazy_dots <- function(x, env = baseenv()) {
 #' @param .dots A list of lazy objects
 #' @param all_named If \code{TRUE}, uses \code{\link{auto_name}} to ensure
 #'   every component has a name.
+#' @param env Environment to use for objects that don't already have
+#'   an associated environment.
 #' @return A \code{\link{lazy_dots}}
 #' @keywords internal
 #' @export
-all_dots <- function(.dots, ..., all_named = FALSE) {
-  dots <- as.lazy_dots(list(...))
+all_dots <- function(.dots, ..., all_named = FALSE, env = baseenv()) {
+  dots <- as.lazy_dots(list(...), env = env)
   if (!missing(.dots)) {
-    dots2 <- as.lazy_dots(.dots)
+    dots2 <- as.lazy_dots(.dots, env = env)
     dots <- c(dots, dots2)
   }
 
