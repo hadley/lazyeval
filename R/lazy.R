@@ -14,6 +14,8 @@
 #' @param env Environment in which to evaluate expr.
 #' @param .follow_symbols If \code{TRUE}, the default, follows promises across
 #'   function calls. See \code{vignette("chained-promises")} for details.
+#' @param .n If \code{.follow_symbols = TRUE} will follow promises .n times.
+#'   NA to follow until it finds a non-promise.
 #' @export
 #' @examples
 #' lazy_(quote(a + x), globalenv())
@@ -49,8 +51,8 @@ lazy_ <- function(expr, env) {
 #' @rdname lazy_
 #' @export
 #' @useDynLib lazyeval make_lazy
-lazy <- function(expr, env = parent.frame(), .follow_symbols = TRUE) {
-  .Call(make_lazy, quote(expr), environment(), .follow_symbols)
+lazy <- function(expr, env = parent.frame(), .follow_symbols = TRUE, .n = NA) {
+  .Call(make_lazy, quote(expr), environment(), .follow_symbols, .n)
 }
 
 is.lazy <- function(x) inherits(x, "lazy")

@@ -1,10 +1,12 @@
 #include <R.h>
 #include <Rdefines.h>
 
-SEXP promise_as_lazy(SEXP promise, SEXP env, int follow_symbols) {
+SEXP promise_as_lazy(SEXP promise, SEXP env, int follow_symbols, int n) {
   // recurse until we find the real promise, not a promise of a promise
   // never go past the global environment
-  while(TYPEOF(promise) == PROMSXP && env != R_GlobalEnv) {
+  // don't go more than n times
+  int i = 0;
+  while(TYPEOF(promise) == PROMSXP && env != R_GlobalEnv && (n == NA_INTEGER || i <= n)) {
     if (PRENV(promise) == R_NilValue) {
       Rf_error("Promise has already been forced");
     }
@@ -15,12 +17,14 @@ SEXP promise_as_lazy(SEXP promise, SEXP env, int follow_symbols) {
     // If the promise is threaded through multiple functions, we'll
     // get some symbols along the way. If the symbol is bound to a promise
     // keep going on up
-    if (follow_symbols && TYPEOF(promise) == SYMSXP) {
+    // Unless we have reached n loops, then we should return the symbol
+    if (follow_symbols && TYPEOF(promise) == SYMSXP && (n == NA_INTEGER || i < n)) {
       SEXP obj = findVar(promise, env);
       if (TYPEOF(obj) == PROMSXP) {
         promise = obj;
       }
     }
+    i++;
   }
 
   // Make named list for output
@@ -40,11 +44,12 @@ SEXP promise_as_lazy(SEXP promise, SEXP env, int follow_symbols) {
   return lazy;
 }
 
-SEXP make_lazy(SEXP name, SEXP env, SEXP follow_symbols_) {
+SEXP make_lazy(SEXP name, SEXP env, SEXP follow_symbols_, SEXP n_) {
   SEXP promise = findVar(name, env);
   int follow_symbols = asLogical(follow_symbols_);
+  int n = asInteger(n_);
 
-  return promise_as_lazy(promise, env, follow_symbols);
+  return promise_as_lazy(promise, env, follow_symbols, n);
 }
 
 SEXP make_lazy_dots(SEXP env, SEXP follow_symbols_) {
@@ -67,7 +72,7 @@ SEXP make_lazy_dots(SEXP env, SEXP follow_symbols_) {
   while(nxt != R_NilValue) {
     SEXP promise = CAR(nxt);
 
-    SEXP lazy = promise_as_lazy(promise, env, follow_symbols);
+    SEXP lazy = promise_as_lazy(promise, env, follow_symbols, NA_INTEGER );
     SET_VECTOR_ELT(lazy_dots, i, lazy);
     if (TAG(nxt) != R_NilValue)
       SET_STRING_ELT(names, i, PRINTNAME(TAG(nxt)));
