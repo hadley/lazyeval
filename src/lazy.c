@@ -17,7 +17,7 @@ SEXP promise_as_lazy(SEXP promise, SEXP env, int follow_symbols) {
     // get some symbols along the way. If the symbol is bound to a promise
     // keep going on up
     // Unless we have reached follow_symbols loops, then we should return the symbol
-    if (TYPEOF(promise) == SYMSXP && i != follow_symbols) {
+    if (TYPEOF(promise) == SYMSXP && (follow_symbols == NA_INTEGER || i < follow_symbols)) {
       SEXP obj = findVar(promise, env);
       if (TYPEOF(obj) == PROMSXP) {
         promise = obj;
