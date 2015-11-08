@@ -13,9 +13,8 @@
 #'   or a call.
 #' @param env Environment in which to evaluate expr.
 #' @param .follow_symbols If \code{TRUE}, the default, follows promises across
-#'   function calls. See \code{vignette("chained-promises")} for details.
-#' @param .n If \code{.follow_symbols = TRUE} will follow promises .n times.
-#'   NA to follow until it finds a non-promise.
+#'   function calls. If an integer, follows promise that many times. See
+#'   \code{vignette("chained-promises")} for details.
 #' @export
 #' @examples
 #' lazy_(quote(a + x), globalenv())
@@ -40,8 +39,8 @@
 #' g(a + b)
 #' h(a + b)
 #'
-#' # To avoid this behavour, set .follow_symbols = FALSE
-#' # See vignette("chained-promises") for details
+#' # To avoid this behavour, set .follow_symbols = FALSE or an integer.
+#' # See vignette("chained-promises") for details.
 lazy_ <- function(expr, env) {
   stopifnot(is.call(expr) || is.name(expr) || is.atomic(expr))
 
@@ -51,8 +50,9 @@ lazy_ <- function(expr, env) {
 #' @rdname lazy_
 #' @export
 #' @useDynLib lazyeval make_lazy
-lazy <- function(expr, env = parent.frame(), .follow_symbols = TRUE, .n = NA) {
-  .Call(make_lazy, quote(expr), environment(), .follow_symbols, .n)
+lazy <- function(expr, env = parent.frame(), .follow_symbols = TRUE) {
+  if (isTRUE(.follow_symbols)) .follow_symbols <- NA
+  .Call(make_lazy, quote(expr), environment(), .follow_symbols)
 }
 
 is.lazy <- function(x) inherits(x, "lazy")

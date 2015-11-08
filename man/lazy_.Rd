@@ -7,7 +7,7 @@
 \usage{
 lazy_(expr, env)
 
-lazy(expr, env = parent.frame(), .follow_symbols = TRUE, .n = NA)
+lazy(expr, env = parent.frame(), .follow_symbols = TRUE)
 }
 \arguments{
 \item{expr}{Expression to capture. For \code{lazy_} must be a name
@@ -16,10 +16,8 @@ or a call.}
 \item{env}{Environment in which to evaluate expr.}
 
 \item{.follow_symbols}{If \code{TRUE}, the default, follows promises across
-function calls. See \code{vignette("chained-promises")} for details.}
-
-\item{.n}{If \code{.follow_symbols = TRUE} will follow promises .n times.
-NA to follow until it finds a non-promise.}
+function calls. If an integer, follows promise that many times. See
+\code{vignette("chained-promises")} for details.}
 }
 \description{
 \code{lazy()} uses non-standard evaluation to turn promises into lazy
@@ -55,7 +53,7 @@ f(a + b)
 g(a + b)
 h(a + b)
 
-# To avoid this behavour, set .follow_symbols = FALSE
+# To avoid this behavour, set .follow_symbols = FALSE or an integer
 # See vignette("chained-promises") for details
 }
 
