@@ -32,6 +32,9 @@ lazy_dots <- function(..., .follow_symbols = FALSE) {
   if (nargs() == 0 || (nargs() == 1 &&  ! missing(.follow_symbols))) {
     return(structure(list(), class = "lazy_dots"))
   }
+  if (isTRUE(.follow_symbols)) {
+    .follow_symbols <- NA
+  }
 
   .Call(make_lazy_dots, environment(), .follow_symbols)
 }

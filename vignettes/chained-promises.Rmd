@@ -43,7 +43,18 @@ g2 <- function(y) f2(y)
 g2(a + b)
 ```
 
-Either way, if you evaluate the lazy expression you'll get the same result:
+Or, you may want to capture the expression from the function that called it (if for example,
+you want to check in a data.frame first using the `data` argument of `lazy_eval()`). In this case
+you can specify an integer number of times to follow symbols.
+
+```{r}
+f3 <- function(x) lazy(x, .follow_symbols = 1)
+g3 <- function(y) f3(y)
+
+g3(a + b)
+```
+
+All of these expressions will evaluate to the same result:
 
 ```{r}
 a <- 10
@@ -51,6 +62,7 @@ b <- 1
 
 lazy_eval(g1(a + b))
 lazy_eval(g2(a + b))
+lazy_eval(g3(a + b))
 ```
 
 Note that the resolution of chained promises only works with unevaluated objects. This is because R deletes the information about the environment associated with a promise when it has been forced, so that the garbage collector is allowed to remove the environment from memory in case it is no longer used. `lazy()` will fail with an error in such situations.
