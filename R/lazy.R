@@ -51,7 +51,10 @@ lazy_ <- function(expr, env) {
 #' @export
 #' @useDynLib lazyeval make_lazy
 lazy <- function(expr, env = parent.frame(), .follow_symbols = TRUE) {
-  if (isTRUE(.follow_symbols)) .follow_symbols <- NA
+  if (isTRUE(.follow_symbols)) {
+    .follow_symbols <- NA
+  }
+
   .Call(make_lazy, quote(expr), environment(), .follow_symbols)
 }
 
