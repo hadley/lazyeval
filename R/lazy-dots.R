@@ -1,6 +1,8 @@
 #' Capture ... (dots) for later lazy evaluation.
 #'
 #' @param ... Dots from another function
+#' @param .drop_last_if_empty Should the last argument from the dots be dropped
+#'   if it is missing?
 #' @return A named list of \code{\link{lazy}} expressions.
 #' @inheritParams lazy
 #' @export
@@ -28,12 +30,32 @@
 #' l["z"] <- list(~g)
 #'
 #' c(lazy_dots(x = 1), lazy_dots(f))
-lazy_dots <- function(..., .follow_symbols = FALSE) {
-  if (nargs() == 0 || (nargs() == 1 &&  ! missing(.follow_symbols))) {
+#'
+#' # The last argument will be dropped by default if it is missing,
+#' # this makes the terminal semicolon optional:
+#' lazy_dots(1, )
+#' lazy_dots(1)
+#' lazy_dots(.drop_last_if_empty = FALSE, 1, )
+lazy_dots <- function(..., .follow_symbols = FALSE,
+                      .drop_last_if_empty = TRUE) {
+  # Count number of arguments in ...
+  n_args <- nargs() - !missing(.follow_symbols) - !missing(.drop_last_if_empty)
+  if (n_args == 0) {
     return(structure(list(), class = "lazy_dots"))
   }
 
-  .Call(make_lazy_dots, environment(), .follow_symbols)
+  res <- .Call(make_lazy_dots, environment(), .follow_symbols)
+  if (.drop_last_if_empty) {
+    res <- drop_last_if_empty(res)
+  }
+  res
+}
+
+drop_last_if_empty <- function(res) {
+  if (length(res) > 0 && identical(res[[length(res)]]$expr, missing_arg())) {
+    res[[length(res)]] <- NULL
+  }
+  res
 }
 
 is.lazy_dots <- function(x) inherits(x, "lazy_dots")
