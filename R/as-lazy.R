@@ -98,6 +98,7 @@ all_dots <- function(.dots, ..., all_named = FALSE) {
   if (!missing(.dots)) {
     dots2 <- as.lazy_dots(.dots)
     dots <- c(dots, dots2)
+    names(dots) <- enc2native(names(dots))
   }
 
   if (all_named) {
