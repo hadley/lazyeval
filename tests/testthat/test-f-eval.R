@@ -36,3 +36,17 @@ test_that("f_eval does quasiquoting", {
   x <- 10
   expect_equal(f_eval(~ uq(quote(x))), 10)
 })
+
+test_that("look into explicit pronouns", {
+  expect_equal(f_eval(~ .mtcars$cyl, mtcars = mtcars), mtcars$cyl)
+})
+
+test_that("data of explicit pronouns cannot be directly accessed", {
+  expect_error(f_eval(~ cyl, mtcars = mtcars), "not found")
+})
+
+test_that("fails when explicit is malformed", {
+  expect_error(f_eval(~ ., iris, mtcars), "should be named")
+  expect_error(f_eval(~ ., mtcars = "string"), "should contain lists")
+})
+
