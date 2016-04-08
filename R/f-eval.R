@@ -10,6 +10,14 @@
 #' \code{.env} and \code{.data}. These are thin wrappers around \code{.data}
 #' and \code{.env} that throw errors if you try to access non-existent values.
 #'
+#' You can also provide additional sources of data by supplying named
+#' lists or data frames in \code{...}. Each of these arguments will
+#' get a pronoun based on the argument name. These names are
+#' automatically prefixed with a dot. Contrarily to \code{data}, these
+#' additional sources are not directly accessible, you have to
+#' explicitly qualify them with the relevant pronoun to access these
+#' data sources.
+#'
 #' @param f A one-sided formula. Any expressions wrapped in \code{ uq() } will
 #'   will be "unquoted", i.e. they will be evaluated, and the results inserted
 #'   back into the formula. See \code{\link{f_interp}} for more details.
@@ -17,6 +25,9 @@
 #'   find the data associated with a given object. If you want to make
 #'   \code{f_eval} work for your own objects, you can define a method for this
 #'   generic.
+#' @param ... Additional sources of pronouns. These should be named
+#'   lists or data frames. The names of the pronouns are automatically
+#'   prefixed with a dot.
 #' @param x An object for which you want to find associated data.
 #' @export
 #' @examples
@@ -40,6 +51,14 @@
 #' f_eval(~ .data$cyl, mtcars)
 #' f_eval(~ .env$cyl, mtcars)
 #'
+#' # Additional pronouns can be added by supplying named lists or data
+#' # frames as argument:
+#' f_eval(~ .iris$Species, iris = iris)
+#'
+#' # The data contained in these sources can only be accessed
+#' # explicitly, through the pronoun. Direct access will fail:
+#' \dontrun{f_eval(~ Species, iris = iris)}
+#'
 #' # Imagine you are computing the mean of a variable:
 #' f_eval(~ mean(cyl), mtcars)
 #' # How can you change the variable that's being computed?
@@ -56,15 +75,29 @@
 #'
 #' # Instead we need to use the prefix form of `$`.
 #' f_eval(~ mean( `$`(.data, uq(var) )), mtcars)
-f_eval <- function(f, data = NULL) {
+f_eval <- function(f, data = NULL, ...) {
   expr <- f_rhs(f_interp(f))
 
   data <- find_data(data)
   env <- environment(f)
+  explicit <- list(...)
+
+  if (length(explicit)) {
+    if (is.null(names(explicit))) {
+      stop("`explicit` should be named", call. = FALSE)
+    }
+    if (!all(vapply(explicit, is.list, logical(1)))) {
+      stop("`explicit` should contain lists or data frames", call. = FALSE)
+    }
+  }
+  names(explicit) <- vapply(names(explicit),
+    function(x) paste0(".", x), character(1))
 
   expr_env <- new.env(parent = env)
-  expr_env$.env <- complain(env)
-  expr_env$.data <- complain(data)
+  sources <- c(.env = env, .data = list(data), explicit)
+  for (source in names(sources)) {
+    expr_env[[source]] <- complain(sources[[source]])
+  }
 
   eval(expr, data, expr_env)
 }

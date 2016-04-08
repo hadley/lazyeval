@@ -5,7 +5,7 @@
 \alias{find_data}
 \title{Evaluate a formula}
 \usage{
-f_eval(f, data = NULL)
+f_eval(f, data = NULL, ...)
 
 find_data(x)
 }
@@ -18,6 +18,10 @@ back into the formula. See \code{\link{f_interp}} for more details.}
 find the data associated with a given object. If you want to make
 \code{f_eval} work for your own objects, you can define a method for this
 generic.}
+
+\item{...}{Additional sources of pronouns. These should be named
+lists or data frames. The names of the pronouns are automatically
+prefixed with a dot.}
 
 \item{x}{An object for which you want to find associated data.}
 }
@@ -32,6 +36,14 @@ When used with \code{data}, \code{f_eval} provides two pronouns to make it
 possible to be explicit about where you want values to come from:
 \code{.env} and \code{.data}. These are thin wrappers around \code{.data}
 and \code{.env} that throw errors if you try to access non-existent values.
+
+You can also provide additional sources of data by supplying named
+lists or data frames in \code{...}. Each of these arguments will
+get a pronoun based on the argument name. These names are
+automatically prefixed with a dot. Contrarily to \code{data}, these
+additional sources are not directly accessible, you have to
+explicitly qualify them with the relevant pronoun to access these
+data sources.
 }
 \examples{
 f_eval(~ 1 + 2 + 3)
@@ -53,6 +65,14 @@ f_eval(~ cyl, mtcars)
 cyl <- 10
 f_eval(~ .data$cyl, mtcars)
 f_eval(~ .env$cyl, mtcars)
+
+# Additional pronouns can be added by supplying named lists or data
+# frames as argument:
+f_eval(~ .iris$Species, iris = iris)
+
+# The data contained in these sources can only be accessed
+# explicitly, through the pronoun. Direct access will fail:
+\dontrun{f_eval(~ Species, iris = iris)}
 
 # Imagine you are computing the mean of a variable:
 f_eval(~ mean(cyl), mtcars)
