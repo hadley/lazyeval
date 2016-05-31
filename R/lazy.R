@@ -1,17 +1,21 @@
 #' Capture expression for later lazy evaluation.
 #'
-#' \code{lazy()} uses non-standard evaluation to turn promises into lazy
-#' objects; \code{lazy_()} does standard evaluation and is suitable for
-#' programming.
+#' \code{lazy()} uses non-standard evaluation to turn promises into
+#' lazy objects; \code{lazy_()} and \code{lazy__()} do standard
+#' evaluation and are suitable for programming. The former is a
+#' constructor for a lazy object while the latter will check the
+#' promise for a given symbol in a given environment.
 #'
 #' Use \code{lazy()} like you'd use \code{\link{substitute}()}
 #' to capture an unevaluated promise. Compared to \code{substitute()} it
 #' also captures the environment associated with the promise, so that you
 #' can correctly replay it in the future.
 #'
-#' @param expr Expression to capture. For \code{lazy_} must be a name
+#' @param expr Expression to capture. For \code{lazy_()} must be a name
 #'   or a call.
-#' @param env Environment in which to evaluate expr.
+#' @param symbol Symbol for which to check a promise.
+#' @param env Environment in which to evaluate \code{expr} or
+#'   check \code{symbol}.
 #' @param .follow_symbols If \code{TRUE}, the default, follows promises across
 #'   function calls. See \code{vignette("chained-promises")} for details.
 #' @export
@@ -51,6 +55,13 @@ lazy_ <- function(expr, env) {
 #' @useDynLib lazyeval make_lazy
 lazy <- function(expr, env = parent.frame(), .follow_symbols = TRUE) {
   .Call(make_lazy, quote(expr), environment(), .follow_symbols)
+}
+
+#' @rdname lazy_
+#' @export
+lazy__ <- function(symbol, env, .follow_symbols = TRUE) {
+  stopifnot(is.symbol(symbol))
+  .Call(make_lazy, symbol, env, .follow_symbols)
 }
 
 is.lazy <- function(x) inherits(x, "lazy")
