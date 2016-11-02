@@ -22,12 +22,33 @@ SEXP as_name(SEXP x) {
   }
 }
 
+SEXP shallow_duplicate(SEXP list)
+{
+  if (TYPEOF(list) != LISTSXP)
+    Rf_errorcall(R_NilValue, "'shallow_duplicate' can only handle LISTSXP objects for now.");
+  SEXP new = R_NilValue;
+  SEXP next, a;
+  /**** Could be done in a single pass */
+  /**** Don't need to protect since CONS does */
+  for (next = list; next != R_NilValue; next = CDR(next))
+    new = Rf_cons(R_NilValue, new);
+  for (next = list, a = new;
+       next != R_NilValue;
+       next = CDR(next), a = CDR(a)) {
+    SETCAR(a, CAR(next));
+    SET_TAG(a, TAG(next));
+    /**** ATTRIB?? */
+    SET_NAMED(CAR(a), 2); /* may not be necessary */
+  }
+  return new;
+}
+
 SEXP lhs_name(SEXP x) {
   if (TYPEOF(x) != VECSXP)
     Rf_errorcall(R_NilValue, "`x` must be a list (not a %s)", Rf_type2char(TYPEOF(x)));
 
   int n = Rf_length(x);
-  SEXP x2 = PROTECT(Rf_shallow_duplicate(x));
+  SEXP x2 = PROTECT(shallow_duplicate(x));
 
   SEXP names = Rf_getAttrib(x2, R_NamesSymbol);
   if (names == R_NilValue) {
