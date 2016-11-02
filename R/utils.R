@@ -35,3 +35,28 @@ substitute_ <- function(x, env) {
 missing_arg <- function() {
   quote(expr = )
 }
+
+drop_last <- function(x) {
+  x[-length(x)]
+}
+drop_first <- function(x) {
+  x[-1]
+}
+zip <- function(.l) {
+  inner_names <- names(.l[[1]])
+  if (is.null(inner_names)) {
+    fields <- seq_along(.l[[1]])
+  } else {
+    fields <- set_names(inner_names)
+  }
+
+  lapply(fields, function(i) {
+    lapply(.l, .subset2, i)
+  })
+}
+set_names <- function(x, nm = x) {
+  stats::setNames(x, nm)
+}
+vapply_int <- function(.x, .f, ...) {
+  vapply(.x, .f, integer(1), ...)
+}
