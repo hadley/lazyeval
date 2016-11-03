@@ -4,9 +4,16 @@ language: r
 sudo: false
 cache: packages
 r:
-  - oldrel
-  - release
-  - devel
+ - 3.0.3
+ - oldrel
+ - release
+ - devel
+
+before_install:
+  - if [[ "$TRAVIS_R_VERSION_STRING" = '3.0.3' ]]; then git clone https://github.com/hadley/devtools ~/devtools && pushd ~/devtools && git fetch origin pull/1388/head:3.0.3 && git checkout 3.0.3 && R CMD build . && R CMD INSTALL devtools*tar.gz && popd;fi
+
+install:
+  - R -e 'devtools::install_deps(dep = T)'
 
 after_success:
   - Rscript -e 'covr::codecov(line_exclusions = c("R/lazy.R", "R/lazy-as.R", "R/lazy-dots.R", "R/lazy-names.R", "R/lazy-call.R", "R/lazy-eval.R", "R/lazy-interp.R", "src/lazy.c"))'
