@@ -27,7 +27,7 @@ SEXP lhs_name(SEXP x) {
     Rf_errorcall(R_NilValue, "`x` must be a list (not a %s)", Rf_type2char(TYPEOF(x)));
 
   int n = Rf_length(x);
-  SEXP x2 = PROTECT(Rf_shallow_duplicate(x));
+  SEXP x2 = PROTECT(Rf_duplicate(x));
 
   SEXP names = Rf_getAttrib(x2, R_NamesSymbol);
   if (names == R_NilValue) {
