@@ -88,7 +88,7 @@ f_lhs <- function(f) {
 #' @rdname f_rhs
 #' @useDynLib lazyeval env
 f_env <- function(f) {
-  .Call(env, f)
+  .Call("env", f)
 }
 
 #' @export
