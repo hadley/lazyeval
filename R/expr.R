@@ -69,28 +69,19 @@ expr_text_ <- function(x, width = 60L, nlines = Inf) {
   paste0(str, collapse = "\n")
 }
 
-#' @useDynLib lazyeval expr_find_
 #' @export
 #' @rdname expr_label
 expr_find <- function(x) {
-  .Call(expr_find_, quote(x), environment())
+  rlang::arg_expr(x)
 }
 
-#' @useDynLib lazyeval expr_env_
-#' @param default_env If supplied, \code{expr_env} will return this if the
-#'   promise has already been forced. Otherwise it will throw an error.
+#' @param default_env Deprecated and has no longer any effect.
+#'   \code{expr_env()} now always returns an environment.
 #' @export
 #' @rdname expr_label
 expr_env <- function(x, default_env) {
-  env <- .Call(expr_env_, quote(x), environment())
-
-  if (is.null(env)) {
-    if (missing(default_env)) {
-      stop("Promise has already been forced")
-    } else {
-      default_env
-    }
-  } else {
-    env
+  if (!missing(default_env)) {
+    warning(call. = FALSE, "`default_env` is deprecated")
   }
+  rlang::arg_env(x)
 }
