@@ -5,7 +5,6 @@
 #' @return A named list of \code{\link{lazy}} expressions.
 #' @inheritParams lazy
 #' @export
-#' @useDynLib lazyeval make_lazy_dots
 #' @examples
 #' lazy_dots(x = 1)
 #' lazy_dots(a, b, c * 4)
@@ -29,8 +28,29 @@
 #' l["z"] <- list(~g)
 #'
 #' c(lazy_dots(x = 1), lazy_dots(f))
-lazy_dots <- function(..., .follow_symbols = FALSE, .ignore_empty = FALSE) {
-  .Call(make_lazy_dots, environment(), .follow_symbols, .ignore_empty)
+lazy_dots <- function(..., .follow_symbols = TRUE, .ignore_empty = FALSE) {
+  dots <- rlang::arg_dots(...)
+  if (!length(dots)) {
+    return(structure(list(), class = "lazy_dots"))
+  }
+
+  if (.follow_symbols) {
+    stack <- rlang::call_stack()
+  } else {
+    stack <- rlang::call_stack(2)
+  }
+
+  info <- rlang::dots_info_(dots, stack)
+  lazy_dots <- lapply2(info, seq_along(info), info_as_lazy)
+
+  if (.ignore_empty) {
+    is_missing <- vapply_lgl(lazy_dots, function(lzy) {
+      rlang::is_missing(lzy$expr)
+    })
+    lazy_dots <- lazy_dots[!is_missing]
+  }
+
+  structure(lazy_dots, class = "lazy_dots")
 }
 
 is.lazy_dots <- function(x) inherits(x, "lazy_dots")

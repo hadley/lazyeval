@@ -35,3 +35,9 @@ substitute_ <- function(x, env) {
 missing_arg <- function() {
   quote(expr = )
 }
+vapply_lgl <- function(.x, .f, ...) {
+  vapply(.x, .f, logical(1), ...)
+}
+lapply2 <- function(.x, .y, .f, ...) {
+  Map(.f, .x, .y, ...)
+}

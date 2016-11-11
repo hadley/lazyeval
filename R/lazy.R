@@ -48,9 +48,35 @@ lazy_ <- function(expr, env) {
 
 #' @rdname lazy_
 #' @export
-#' @useDynLib lazyeval make_lazy
 lazy <- function(expr, env = parent.frame(), .follow_symbols = TRUE) {
-  .Call(make_lazy, quote(expr), environment(), .follow_symbols)
+  if (.follow_symbols) {
+    stack <- rlang::call_stack()
+  } else {
+    stack <- rlang::call_stack(2)
+  }
+  info <- rlang::arg_info_(quote(expr), stack)
+  info_as_lazy(info)
+}
+
+info_as_lazy <- function(info, i_dot) {
+  lzy <- list(
+    expr = info$expr,
+    env = info$eval_frame$env
+  )
+  lzy <- substitute_dots(lzy, info$eval_frame$env, i_dot)
+  structure(lzy, class = "lazy")
+}
+substitute_dots <- function(lazy, caller_env, i_dot) {
+  if (!is.symbol(lazy$expr)) {
+    return(lazy)
+  }
+
+  nm <- as.character(lazy$expr)
+  if (grepl("\\.\\.[0-9]+$", nm)) {
+    dots <- rlang::frame_dots(caller_env)
+    lazy$expr <- dots[[i_dot]]
+  }
+  lazy
 }
 
 is.lazy <- function(x) inherits(x, "lazy")
