@@ -12,6 +12,8 @@ License: GPL-3
 LazyData: true
 Depends:
     R (>= 3.1.0)
+Imports:
+    rlang
 Suggests:
     knitr,
     rmarkdown (>= 0.2.65),
@@ -19,3 +21,4 @@ Suggests:
     covr
 VignetteBuilder: knitr
 RoxygenNote: 5.0.1
+Remotes: hadley/rlang#2

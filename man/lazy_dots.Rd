@@ -4,7 +4,7 @@
 \alias{lazy_dots}
 \title{Capture ... (dots) for later lazy evaluation.}
 \usage{
-lazy_dots(..., .follow_symbols = FALSE, .ignore_empty = FALSE)
+lazy_dots(..., .follow_symbols = TRUE, .ignore_empty = FALSE)
 }
 \arguments{
 \item{...}{Dots from another function}
