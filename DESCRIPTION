@@ -21,3 +21,4 @@ Suggests:
     covr
 VignetteBuilder: knitr
 RoxygenNote: 5.0.1
+Remotes: hadley/rlang#2
