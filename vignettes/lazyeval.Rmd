@@ -426,7 +426,7 @@ There are two ways that this function might fail:
     threshold_x(df3, 3)
     ```
 
-These failures are partiuclarly pernicious because instead of throwing an error they silently produce the wrong answer. Both failures arise because `f_eval()` introduces ambiguity by looking in two places for each name: the supplied data and formula environment. 
+These failures are particularly pernicious because instead of throwing an error they silently produce the wrong answer. Both failures arise because `f_eval()` introduces ambiguity by looking in two places for each name: the supplied data and formula environment. 
 
 To make `threshold_x()` more reliable, we need to be more explicit by using the `.data` and `.env` pronouns:
 
