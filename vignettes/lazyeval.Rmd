@@ -113,7 +113,7 @@ There are two variations on the theme of `expr_text()`:
 1.  `plot()` uses `deparse(substitute(x))` to generate labels for the x and y
     axes. Can you generate input that causes it to display bad labels?
     Write your own wrapper around `plot()` that uses `expr_label()` to compute
-    `xlim` and `ylim`.
+    `xlab` and `ylab`.
     
 1.  Create a simple implementation of `mean()` that stops with an informative
     error message if the argument is not numeric:
