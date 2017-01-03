@@ -3,25 +3,33 @@
 \name{lazy_}
 \alias{lazy}
 \alias{lazy_}
+\alias{lazy__}
 \title{Capture expression for later lazy evaluation.}
 \usage{
 lazy_(expr, env)
 
 lazy(expr, env = parent.frame(), .follow_symbols = TRUE)
+
+lazy__(symbol, env, .follow_symbols = TRUE)
 }
 \arguments{
-\item{expr}{Expression to capture. For \code{lazy_} must be a name
+\item{expr}{Expression to capture. For \code{lazy_()} must be a name
 or a call.}
 
-\item{env}{Environment in which to evaluate expr.}
+\item{env}{Environment in which to evaluate \code{expr} or
+check \code{symbol}.}
 
 \item{.follow_symbols}{If \code{TRUE}, the default, follows promises across
 function calls. See \code{vignette("chained-promises")} for details.}
+
+\item{symbol}{Symbol for which to check a promise.}
 }
 \description{
-\code{lazy()} uses non-standard evaluation to turn promises into lazy
-objects; \code{lazy_()} does standard evaluation and is suitable for
-programming.
+\code{lazy()} uses non-standard evaluation to turn promises into
+lazy objects; \code{lazy_()} and \code{lazy__()} do standard
+evaluation and are suitable for programming. The former is a
+constructor for a lazy object while the latter will check the
+promise for a given symbol in a given environment.
 }
 \details{
 Use \code{lazy()} like you'd use \code{\link{substitute}()}
