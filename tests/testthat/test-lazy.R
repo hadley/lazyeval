@@ -45,3 +45,17 @@ test_that("lazy() works for double-colon operator", {
   expect_error(lazy <- lazy_caller(stats::runif(10)), NA)
   expect_error(nested_lazy <- outer_fun(stats::runif(10)), NA)
 })
+
+test_that("lazy_eval() without .data assings environment to formulas and functions", {
+  data <- NULL
+  lazy <- lazy_eval(lazy_dots(~x, function() TRUE), data)
+  expect_identical(environment(lazy[[1]]), environment())
+  expect_identical(environment(lazy[[2]]), environment())
+})
+
+test_that("lazy_eval() with .data assings environment to formulas and functions", {
+  data <- list()
+  lazy <- lazy_eval(lazy_dots(~x, function() TRUE), data)
+  expect_identical(environment(lazy[[1]]), environment())
+  expect_identical(environment(lazy[[2]]), environment())
+})
