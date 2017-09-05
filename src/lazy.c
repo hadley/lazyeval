@@ -30,8 +30,7 @@ SEXP promise_as_lazy(SEXP promise, SEXP env, int follow_symbols) {
 
   // Make named list for output
   SEXP lazy = PROTECT(allocVector(VECSXP, 2));
-  if (NAMED(promise) < 2)
-    SET_NAMED(promise, 2);
+  MARK_NOT_MUTABLE(promise);
   SET_VECTOR_ELT(lazy, 0, promise);
   SET_VECTOR_ELT(lazy, 1, env);
 

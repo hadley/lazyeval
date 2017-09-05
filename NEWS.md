@@ -1,6 +1,10 @@
 # lazyeval 0.2.0.9000
 
+* Switch from `SET_NAMED()` to `MARK_NOT_MUTABLE()` in prevision of an
+  API change in R core
+
 * No longer check the type of the sides of the formula.
+
 
 # lazyeval 0.2.0
 
