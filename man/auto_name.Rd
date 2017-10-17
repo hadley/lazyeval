@@ -22,4 +22,3 @@ auto_name(x)
 auto_name(list(~f, quote(x)))
 }
 \keyword{internal}
-

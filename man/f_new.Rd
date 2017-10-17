@@ -21,4 +21,3 @@ Create a formula object by "hand".
 f_new(quote(a))
 f_new(quote(a), quote(b))
 }
-

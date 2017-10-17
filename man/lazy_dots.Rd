@@ -44,4 +44,3 @@ l["z"] <- list(~g)
 
 c(lazy_dots(x = 1), lazy_dots(f))
 }
-

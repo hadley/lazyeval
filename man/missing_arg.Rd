@@ -13,4 +13,3 @@ Generate a missing argument.
 f_interp(~f(x = uq(missing_arg())))
 f_interp(~f(x = uq(NULL)))
 }
-
