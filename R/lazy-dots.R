@@ -5,7 +5,6 @@
 #' @return A named list of \code{\link{lazy}} expressions.
 #' @inheritParams lazy
 #' @export
-#' @useDynLib lazyeval make_lazy_dots
 #' @examples
 #' lazy_dots(x = 1)
 #' lazy_dots(a, b, c * 4)
@@ -30,7 +29,7 @@
 #'
 #' c(lazy_dots(x = 1), lazy_dots(f))
 lazy_dots <- function(..., .follow_symbols = FALSE, .ignore_empty = FALSE) {
-  .Call(make_lazy_dots, environment(), .follow_symbols, .ignore_empty)
+  .Call(lazyeval_make_lazy_dots, environment(), .follow_symbols, .ignore_empty)
 }
 
 is.lazy_dots <- function(x) inherits(x, "lazy_dots")

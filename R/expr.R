@@ -69,20 +69,18 @@ expr_text_ <- function(x, width = 60L, nlines = Inf) {
   paste0(str, collapse = "\n")
 }
 
-#' @useDynLib lazyeval expr_find_
 #' @export
 #' @rdname expr_label
 expr_find <- function(x) {
-  .Call(expr_find_, quote(x), environment())
+  .Call(lazyeval_expr_find_, quote(x), environment())
 }
 
-#' @useDynLib lazyeval expr_env_
 #' @param default_env If supplied, \code{expr_env} will return this if the
 #'   promise has already been forced. Otherwise it will throw an error.
 #' @export
 #' @rdname expr_label
 expr_env <- function(x, default_env) {
-  env <- .Call(expr_env_, quote(x), environment())
+  env <- .Call(lazyeval_expr_env_, quote(x), environment())
 
   if (is.null(env)) {
     if (missing(default_env)) {
