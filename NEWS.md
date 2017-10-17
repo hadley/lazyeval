@@ -1,4 +1,9 @@
-# lazyeval 0.2.0.9000
+# lazyeval 0.2.1
+
+This is a maintenance release. The lazyeval package is no longer
+developed as the tidyverse is switching to tidy evaluation.
+
+* Use new registration system.
 
 * Switch from `SET_NAMED()` to `MARK_NOT_MUTABLE()` in prevision of an
   API change in R core
