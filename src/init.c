@@ -2,7 +2,7 @@
 #include <R_ext/Rdynload.h>
 
 extern SEXP env(SEXP);
-extern SEXP expr_env_(SEXP, SEXP, SEXP);
+extern SEXP expr_env_(SEXP, SEXP);
 extern SEXP expr_find_(SEXP, SEXP);
 extern SEXP interp_(SEXP, SEXP, SEXP);
 extern SEXP lhs(SEXP);
@@ -13,7 +13,7 @@ extern SEXP rhs(SEXP);
 
 static const R_CallMethodDef call_entries[] = {
   {"lazyeval_env",                  (DL_FUNC) &env, 1},
-  {"lazyeval_expr_env_",            (DL_FUNC) &expr_env_, 3},
+  {"lazyeval_expr_env_",            (DL_FUNC) &expr_env_, 2},
   {"lazyeval_expr_find_",           (DL_FUNC) &expr_find_, 2},
   {"lazyeval_interp_",              (DL_FUNC) &interp_, 3},
   {"lazyeval_lhs",                  (DL_FUNC) &lhs, 1},

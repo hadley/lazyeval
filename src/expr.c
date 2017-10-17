@@ -70,7 +70,7 @@ SEXP expr_find_(SEXP name, SEXP env) {
   return base_promise(promise, env);
 }
 
-SEXP expr_env_(SEXP name, SEXP env, SEXP env_default) {
+SEXP expr_env_(SEXP name, SEXP env) {
   SEXP promise = Rf_findVar(name, env);
   return base_promise_env(promise, env);
 }
