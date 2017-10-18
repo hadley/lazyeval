@@ -40,14 +40,18 @@ SEXP lhs_name(SEXP x) {
     if (!is_formula(xi) || Rf_length(xi) != 3)
       continue;
 
+    // Hush rchk false positives
+    SEXP p_lhs = PROTECT(lhs(xi));
+    SEXP p_env = PROTECT(env(xi));
+
     // set name
-    SEXP name = PROTECT(Rf_eval(lhs(xi), env(xi)));
+    SEXP name = PROTECT(Rf_eval(p_lhs, p_env));
     if (TYPEOF(name) != NILSXP)
       SET_STRING_ELT(names, i, as_name(name));
-    UNPROTECT(1);
 
     // replace with RHS of formula
     SET_VECTOR_ELT(x2, i, make_formula1(CADDR(xi), env(xi)));
+    UNPROTECT(3);
   }
 
   UNPROTECT(1);
