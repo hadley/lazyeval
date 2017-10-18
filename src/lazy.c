@@ -62,10 +62,13 @@ SEXP make_lazy_dots(SEXP env, SEXP follow_symbols_, SEXP ignore_empty_) {
   int follow_symbols = asLogical(follow_symbols_);
   int ignore_empty = asLogical(ignore_empty_);
 
+  // Hush rchk false positive
+  PROTECT(dots);
+
   if (dots == R_MissingArg) {
     SEXP out = PROTECT(Rf_allocVector(VECSXP, 0));
     setAttrib(out, install("class"), PROTECT(mkString("lazy_dots")));
-    UNPROTECT(2);
+    UNPROTECT(3);
     return out;
   }
 
@@ -100,7 +103,7 @@ SEXP make_lazy_dots(SEXP env, SEXP follow_symbols_, SEXP ignore_empty_) {
   setAttrib(lazy_dots, install("names"), names);
   setAttrib(lazy_dots, install("class"), PROTECT(mkString("lazy_dots")));
 
-  UNPROTECT(3);
+  UNPROTECT(4);
 
   return lazy_dots;
 }

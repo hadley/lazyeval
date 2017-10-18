@@ -30,6 +30,10 @@ SEXP lhs_name(SEXP x) {
   SEXP x2 = PROTECT(Rf_shallow_duplicate(x));
 
   SEXP names = Rf_getAttrib(x2, R_NamesSymbol);
+
+  // Hush rchk false positives
+  PROTECT(names);
+
   if (names == R_NilValue) {
     names = Rf_allocVector(STRSXP, n);
     Rf_setAttrib(x2, R_NamesSymbol, names);
@@ -54,6 +58,6 @@ SEXP lhs_name(SEXP x) {
     UNPROTECT(3);
   }
 
-  UNPROTECT(1);
+  UNPROTECT(2);
   return x2;
 }
