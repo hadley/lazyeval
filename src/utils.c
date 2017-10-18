@@ -3,15 +3,19 @@
 #include <Rinternals.h>
 #include <stdbool.h>
 
+bool is_symbol_str(SEXP sym, const char* f) {
+  return !strcmp(CHAR(PRINTNAME(sym)), f);
+}
+
 bool is_call_to(SEXP x, const char* f) {
   if (!Rf_isLanguage(x))
     return false;
 
   SEXP fun = CAR(x);
-  if (!Rf_isSymbol(fun))
+  if (Rf_isSymbol(fun))
+    return is_symbol_str(fun, f);
+  else
     return false;
-
-  return fun == Rf_install(f);
 }
 
 bool is_lazy_load(SEXP x) {
