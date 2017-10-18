@@ -30,8 +30,7 @@ SEXP promise_as_lazy(SEXP promise, SEXP env, int follow_symbols) {
 
   // Make named list for output
   SEXP lazy = PROTECT(allocVector(VECSXP, 2));
-  if (NAMED(promise) < 2)
-    SET_NAMED(promise, 2);
+  MARK_NOT_MUTABLE(promise);
   SET_VECTOR_ELT(lazy, 0, promise);
   SET_VECTOR_ELT(lazy, 1, env);
 
@@ -63,10 +62,13 @@ SEXP make_lazy_dots(SEXP env, SEXP follow_symbols_, SEXP ignore_empty_) {
   int follow_symbols = asLogical(follow_symbols_);
   int ignore_empty = asLogical(ignore_empty_);
 
+  // Hush rchk false positive
+  PROTECT(dots);
+
   if (dots == R_MissingArg) {
     SEXP out = PROTECT(Rf_allocVector(VECSXP, 0));
     setAttrib(out, install("class"), PROTECT(mkString("lazy_dots")));
-    UNPROTECT(2);
+    UNPROTECT(3);
     return out;
   }
 
@@ -101,7 +103,7 @@ SEXP make_lazy_dots(SEXP env, SEXP follow_symbols_, SEXP ignore_empty_) {
   setAttrib(lazy_dots, install("names"), names);
   setAttrib(lazy_dots, install("class"), PROTECT(mkString("lazy_dots")));
 
-  UNPROTECT(3);
+  UNPROTECT(4);
 
   return lazy_dots;
 }

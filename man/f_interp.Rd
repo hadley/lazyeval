@@ -3,6 +3,8 @@
 \name{f_interp}
 \alias{f_interp}
 \alias{uq}
+\alias{uqs}
+\alias{uq}
 \alias{uqf}
 \alias{uqs}
 \title{Interpolate a formula}
@@ -37,6 +39,7 @@ These terms have a rich history in LISP, and live on in modern languages
 like \href{Julia}{http://docs.julialang.org/en/release-0.1/manual/metaprogramming/}
 and \href{Racket}{https://docs.racket-lang.org/reference/quasiquote.html}.
 }
+
 \examples{
 f_interp(x ~ 1 + uq(1 + 2 + 3) + 10)
 
@@ -57,4 +60,3 @@ f <- foo(10)
 f
 f_interp(f)
 }
-

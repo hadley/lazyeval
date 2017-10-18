@@ -58,9 +58,8 @@ is_formula <- function(x) {
 #' f_lhs(x ~ y)
 #'
 #' f_env(~ x)
-#' @useDynLib lazyeval rhs
 f_rhs <- function(f) {
-  .Call(rhs, f)
+  .Call(lazyeval_rhs, f)
 }
 
 #' @export
@@ -72,9 +71,8 @@ f_rhs <- function(f) {
 
 #' @export
 #' @rdname f_rhs
-#' @useDynLib lazyeval lhs
 f_lhs <- function(f) {
-  .Call(lhs, f)
+  .Call(lazyeval_lhs, f)
 }
 
 #' @export
@@ -86,9 +84,8 @@ f_lhs <- function(f) {
 
 #' @export
 #' @rdname f_rhs
-#' @useDynLib lazyeval env
 f_env <- function(f) {
-  .Call(env, f)
+  .Call(lazyeval_env, f)
 }
 
 #' @export
@@ -162,16 +159,15 @@ f_unwrap <- function(f) {
 #' @param x An existing list
 #' @return A named list.
 #' @export
-#' @useDynLib lazyeval lhs_name
 #' @examples
 #' f_list("y" ~ x)
 #' f_list(a = "y" ~ a, ~ b, c = ~c)
 f_list <- function(...) {
-  .Call(lhs_name, list(...))
+  .Call(lazyeval_lhs_name, list(...))
 }
 
 #' @export
 #' @rdname f_list
 as_f_list <- function(x) {
-  .Call(lhs_name, x)
+  .Call(lazyeval_lhs_name, x)
 }

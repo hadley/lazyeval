@@ -1,34 +1,32 @@
+
 ## Test environments
-* local OS X install, R 3.3.0
-* ubuntu 12.04 (on travis-ci), R 3.3.0
-* win-builder (devel and release)
+
+* local OS X install, R-release
+* ubuntu 12.04, R 3.1 -> R-devel
+* win-builder (R-devel)
+
 
 ## R CMD check results
 
 0 errors | 0 warnings | 0 notes
 
-## Reverse dependencies
 
-I ran `R CMD check` on all 55 reverse dependencies. (https://github.com/hadley/dplyr/tree/master/revdep/). 
+## revdepcheck results
 
-I saw the following problems:
+We checked 127 reverse dependencies, comparing R CMD check results
+across CRAN and dev versions of this package.
 
-* datastepr: checking re-building of vignette outputs ... WARNING
-  New vignette failure - not obvious why.
+ * We saw 0 new problems
+ * We failed to check 7 packages
 
-* ggvis: checking tests ... ERROR
-  Existing CRAN failure (I'll get this fixed next week)
+Issues with CRAN packages are summarised below.
 
-* markmyassignment: checking tests ... ERROR
-  New test failure - not obvious why.
+### Failed to check
 
-* mosaic: checking examples ... ERROR
-  Author is aware of problem and planning submission ASAP.
-
-* poplite: checking re-building of vignette outputs ... WARNING
-
-* tibble: checking tests ... ERROR
-  Existing CRAN failure
-
-I notified all authors about problems on on May 27 and again today.
-
+* cpr (failed to install)
+* HTSSIP (timeout)
+* jqr (failed to install)
+* mrgsolve (failed to install)
+* openair (failed to install)
+* ropenaq (timeout)
+* sf (failed to install)

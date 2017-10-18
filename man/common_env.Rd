@@ -20,4 +20,3 @@ common_env(list(f(1)))
 common_env(list(f(1), f(2)))
 }
 \keyword{internal}
-

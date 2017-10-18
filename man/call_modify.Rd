@@ -38,4 +38,3 @@ call_modify(call, list(trim = 0.1))
 # Add an explicit missing argument
 call_modify(call, list(na.rm = quote(expr = )))
 }
-

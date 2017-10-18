@@ -16,4 +16,3 @@ Is object a formula?
 is_formula(~ 10)
 is_formula(10)
 }
-

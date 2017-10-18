@@ -31,4 +31,3 @@ make_call(quote(f), ~x)
 # If no known or no common environment, fails back to baseenv()
 make_call(quote(f), quote(x))
 }
-

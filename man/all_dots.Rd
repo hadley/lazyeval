@@ -21,4 +21,3 @@ A \code{\link{lazy_dots}}
 Combine explicit and implicit dots.
 }
 \keyword{internal}
-

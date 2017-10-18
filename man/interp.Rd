@@ -44,4 +44,3 @@ interp(~ x + y, .values = list(x = 10))
 y <- 10
 interp(~ x + y, .values = environment())
 }
-

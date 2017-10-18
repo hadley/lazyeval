@@ -23,13 +23,13 @@
 #' h <- function(z) f_capture(z)
 #' f(a + b + c)
 f_capture <- function(x) {
-  lazy <- .Call(make_lazy, quote(x), environment(), TRUE)
+  lazy <- .Call(lazyeval_make_lazy, quote(x), environment(), TRUE)
   f_new(lazy$expr, env = lazy$env)
 }
 
 #' @export
 #' @rdname f_capture
 dots_capture <- function(..., .ignore_empty = TRUE) {
-  lazies <- .Call(make_lazy_dots, environment(), TRUE, .ignore_empty)
+  lazies <- .Call(lazyeval_make_lazy_dots, environment(), TRUE, .ignore_empty)
   lapply(lazies, function(x) f_new(x$expr, env = x$env))
 }
