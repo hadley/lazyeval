@@ -93,7 +93,7 @@ my_label2(a + b)
 
 There are two variations on the theme of `expr_text()`:
 
-*   `expr_find()` find the underlying expression. It works similarly to 
+*   `expr_find()` finds the underlying expression. It works similarly to 
     `substitute()` but will follow a chain of promises back up to the original
     expression. This is often useful for [metaprogramming].
   
