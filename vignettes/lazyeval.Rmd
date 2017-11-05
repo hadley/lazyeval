@@ -552,7 +552,7 @@ add_variable(df, "z", ~ x + y)
 
 In some situations you might want to eliminate the formula altogether, and allow the user to type expressions directly. I was once much enamoured with this approach (witness ggplot2, dplyr, ...). However, I now think that it should be used sparingly because explict quoting with `~` leads to simpler code, and makes it more clear to the user that something special is going on.
 
-That said, lazyeval does allow you to eliminate the `~` if you really want to. In this case, I recommend having both a NSE and SE version of the function. The SE version, which takes formuals, should have suffix `_`:
+That said, lazyeval does allow you to eliminate the `~` if you really want to. In this case, I recommend having both a NSE and SE version of the function. The SE version, which takes formulas, should have suffix `_`:
 
 ```{r}
 sieve_ <- function(df, condition) {
