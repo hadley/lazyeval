@@ -47,7 +47,7 @@ This document is broadly organised according to the three types of non-standard 
 
 The approaches recommended here are quite different to my previous generation of recommendations. I am fairly confident these new approaches are correct, and will not have to change substantially again. The current tools make it easy to solve a number of practical problems that were previously challenging and are rooted in [long-standing theory](http://repository.readscheme.org/ftp/papers/pepm99/bawden.pdf).
 
-[^1]: Currently neither ggplot2 nor dplyr actually use these tools since I've only just figured it out. But I'll be working hard to make sure all my packages are consistent in the near future.
+[^1]: Currently neither ggplot2 nor dplyr actually use these tools since I've only just figured them out. But I'll be working hard to make sure all my packages are consistent in the near future.
 
 ## Labelling
 
