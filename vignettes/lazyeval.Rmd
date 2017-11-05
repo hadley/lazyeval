@@ -589,7 +589,7 @@ subscramble(df, x < 4)
 
 ### Dot-dot-dot
 
-If you want a `...` function that doesn't require formulas, I recommend that the SE version take a list of arguments, and the NSE version uses `dots_capture()` to capture multiple arguments as a list of formulas.
+If you want a `...` function that doesn't require formulas, I recommend that the SE version take a list of arguments, and the NSE version use `dots_capture()` to capture multiple arguments as a list of formulas.
 
 ```{r}
 mogrify_ <- function(`_df`, args) {
