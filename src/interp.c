@@ -43,6 +43,10 @@ SEXP interp_(SEXP x, SEXP env, SEXP data) {
   if (!Rf_isEnvironment(env))
     Rf_error("`env` must be an environment");
 
-  return interp_walk(Rf_duplicate(x), env, data);
+  x = PROTECT(Rf_duplicate(x));
+  SEXP out = interp_walk(x, env, data);
+
+  UNPROTECT(1);
+  return out;
 }
 

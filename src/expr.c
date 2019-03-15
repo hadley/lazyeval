@@ -66,11 +66,15 @@ SEXP base_promise_env(SEXP promise, SEXP env) {
 }
 
 SEXP expr_find_(SEXP name, SEXP env) {
-  SEXP promise = Rf_findVar(name, env);
-  return base_promise(promise, env);
+  SEXP promise = PROTECT(Rf_findVar(name, env));
+  SEXP out = base_promise(promise, env);
+  UNPROTECT(1);
+  return out;
 }
 
 SEXP expr_env_(SEXP name, SEXP env) {
-  SEXP promise = Rf_findVar(name, env);
-  return base_promise_env(promise, env);
+  SEXP promise = PROTECT(Rf_findVar(name, env));
+  SEXP out = base_promise_env(promise, env);
+  UNPROTECT(1);
+  return out;
 }

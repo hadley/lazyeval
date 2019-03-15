@@ -47,10 +47,13 @@ SEXP promise_as_lazy(SEXP promise, SEXP env, int follow_symbols) {
 }
 
 SEXP make_lazy(SEXP name, SEXP env, SEXP follow_symbols_) {
-  SEXP promise = findVar(name, env);
+  SEXP promise = PROTECT(findVar(name, env));
   int follow_symbols = asLogical(follow_symbols_);
 
-  return promise_as_lazy(promise, env, follow_symbols);
+  SEXP out = promise_as_lazy(promise, env, follow_symbols);
+
+  UNPROTECT(1);
+  return out;
 }
 
 int is_missing(SEXP x) {
@@ -58,12 +61,9 @@ int is_missing(SEXP x) {
 }
 
 SEXP make_lazy_dots(SEXP env, SEXP follow_symbols_, SEXP ignore_empty_) {
-  SEXP dots = findVar(R_DotsSymbol, env);
+  SEXP dots = PROTECT(findVar(R_DotsSymbol, env));
   int follow_symbols = asLogical(follow_symbols_);
   int ignore_empty = asLogical(ignore_empty_);
-
-  // Hush rchk false positive
-  PROTECT(dots);
 
   if (dots == R_MissingArg) {
     SEXP out = PROTECT(Rf_allocVector(VECSXP, 0));

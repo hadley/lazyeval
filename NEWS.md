@@ -1,6 +1,7 @@
 
 # lazyeval 0.2.1.9000
 
+* Fix protection issues from rchk reports.
 
 
 # lazyeval 0.2.1
