@@ -4,9 +4,7 @@
 \alias{f_interp}
 \alias{uq}
 \alias{uqs}
-\alias{uq}
 \alias{uqf}
-\alias{uqs}
 \title{Interpolate a formula}
 \usage{
 f_interp(f, data = NULL)
