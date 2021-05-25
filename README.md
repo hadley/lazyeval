@@ -1,5 +1,6 @@
 # lazyeval
 
+[![Lifecycle: retired](https://img.shields.io/badge/lifecycle-retired-orange.svg)](https://www.tidyverse.org/lifecycle/#retired)
 [![Build Status](https://travis-ci.org/hadley/lazyeval.png?branch=master)](https://travis-ci.org/hadley/lazyeval)
 [![Coverage Status](http://codecov.io/github/hadley/lazyeval/coverage.svg?branch=master)](http://codecov.io/github/hadley/lazyeval?branch=master)
 
@@ -19,3 +20,6 @@ Install the development version from github with:
 # install.packages("devtools")
 devtools::install_github("hadley/lazyeval", build_vignettes = TRUE)
 ```
+## Status [![Lifecycle: retired](https://img.shields.io/badge/lifecycle-retired-orange.svg)](https://www.tidyverse.org/lifecycle/#retired)
+
+lazyeval is retired: this means only changes necessary to keep it on CRAN will be made. We recommend using [rlang](http://dplyr.tidyverse.org/) instead.
