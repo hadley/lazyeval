@@ -22,4 +22,4 @@ devtools::install_github("hadley/lazyeval", build_vignettes = TRUE)
 ```
 ## Status [![Lifecycle: retired](https://img.shields.io/badge/lifecycle-retired-orange.svg)](https://www.tidyverse.org/lifecycle/#retired)
 
-lazyeval is retired: this means only changes necessary to keep it on CRAN will be made. We recommend using [rlang](http://dplyr.tidyverse.org/) instead.
+lazyeval is retired: this means only changes necessary to keep it on CRAN will be made. We recommend using [rlang](https://rlang.r-lib.org/) instead.
