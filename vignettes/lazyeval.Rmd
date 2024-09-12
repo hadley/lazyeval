@@ -60,7 +60,7 @@ my_label(x + y)
 
 There are two potential problems with this approach:
 
-1.  For long some expressions, `deparse()` generates a character vector with 
+1.  For some long expressions, `deparse()` generates a character vector with 
     length > 1:
     
     ```{r}
