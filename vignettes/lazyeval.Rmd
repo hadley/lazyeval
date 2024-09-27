@@ -362,7 +362,7 @@ To illustrate these challenges, I will implement a `sieve()` function that works
     
 1.  It always returns a data frame.
 
-The implementation of `sieve()` is straightforward. First we use `f_eval()` to perform NSS. Then we then check that we have a logical vector, replace `NA`s with `FALSE`, and subset with `[`.
+The implementation of `sieve()` is straightforward. First we use `f_eval()` to perform NSS. Then we check that we have a logical vector, replace `NA`s with `FALSE`, and subset with `[`.
 
 ```{R}
 sieve <- function(df, condition) {
