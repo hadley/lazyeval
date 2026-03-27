@@ -1,19 +1,13 @@
 #' Capture expression for later lazy evaluation.
 #'
-#' \code{lazy()} uses non-standard evaluation to turn promises into lazy
-#' objects; \code{lazy_()} does standard evaluation and is suitable for
-#' programming.
-#'
-#' Use \code{lazy()} like you'd use \code{\link{substitute}()}
-#' to capture an unevaluated promise. Compared to \code{substitute()} it
-#' also captures the environment associated with the promise, so that you
-#' can correctly replay it in the future.
+#' \code{lazy()} uses \code{substitute()} to capture an unevaluated
+#' expression along with its environment; \code{lazy_()} does standard
+#' evaluation and is suitable for programming.
 #'
 #' @param expr Expression to capture. For \code{lazy_} must be a name
 #'   or a call.
 #' @param env Environment in which to evaluate expr.
-#' @param .follow_symbols If \code{TRUE}, the default, follows promises across
-#'   function calls. See \code{vignette("chained-promises")} for details.
+#' @param .follow_symbols Ignored. Kept for backwards compatibility.
 #' @export
 #' @examples
 #' lazy_(quote(a + x), globalenv())
@@ -29,17 +23,6 @@
 #' # Lazy also works when called from the global environment. This makes
 #' # easy to play with interactively.
 #' lazy(a + b / c)
-#'
-#' # By default, lazy will climb all the way back to the initial promise
-#' # This is handy if you have if you have nested functions:
-#' g <- function(y) f(y)
-#' h <- function(z) g(z)
-#' f(a + b)
-#' g(a + b)
-#' h(a + b)
-#'
-#' # To avoid this behavour, set .follow_symbols = FALSE
-#' # See vignette("chained-promises") for details
 lazy_ <- function(expr, env) {
   stopifnot(is.call(expr) || is.name(expr) || is.atomic(expr))
 

@@ -1,22 +1,17 @@
 #' Find the expression associated with an argument
 #'
-#' \code{expr_find()} finds the full expression; \code{expr_text()} turns the
-#' expression into a single string; \code{expr_label()} formats it nicely for
-#' use in messages. \code{expr_env()} finds the environment associated with
-#' the expression.
+#' \code{expr_find()} captures the unevaluated expression using
+#' \code{substitute()}; \code{expr_text()} turns the expression into a single
+#' string; \code{expr_label()} formats it nicely for use in messages.
+#' \code{expr_env()} returns the caller's environment.
 #'
-#' These functions never force promises, and will work even if a promise has
-#' previously been forced.
+#' Note: in previous versions, these functions could follow chains of
+#' promises across nested function calls. This is no longer supported.
 #'
-#' @param x A promise (function argument)
+#' @param x An unevaluated expression (function argument)
 #' @export
 #' @examples
-#' # Unlike substitute(), expr_find() finds the original expression
-#' f <- function(x) g(x)
-#' g <- function(y) h(y)
-#' h <- function(z) list(substitute(z), expr_find(z))
-#'
-#' f(1 + 2 + 3)
+#' expr_find(1 + 2 + 3)
 #'
 #' expr_label(10)
 #' # Names a quoted with ``
@@ -75,8 +70,7 @@ expr_find <- function(x) {
   substitute(x)
 }
 
-#' @param default_env If supplied, \code{expr_env} will return this if the
-#'   promise has already been forced. Otherwise it will throw an error.
+#' @param default_env Ignored. Kept for backwards compatibility.
 #' @export
 #' @rdname expr_label
 expr_env <- function(x, default_env) {

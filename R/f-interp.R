@@ -59,29 +59,34 @@ interp_walk <- function(x, env, data) {
   }
 
   # Recursive case: rebuild call handling uqs splicing
-  # Convert to pairlist-style list to preserve names
   elements <- as.list(x)
   el_names <- names(elements)
-  result <- list()
-  res_names <- character(0)
+  n <- length(elements)
+  result <- vector("list", n * 2L)
+  res_names <- character(n * 2L)
+  j <- 0L
 
   for (i in seq_along(elements)) {
     el <- elements[[i]]
-    nm <- if (!is.null(el_names)) el_names[i] else ""
 
-    # Check if this element is a uqs() call (only in argument position, not function position)
+    # Check if this element is a uqs() call (only in argument position)
     if (i > 1L && is.call(el) && is.name(el[[1]]) && as.character(el[[1]]) == "uqs") {
-      spliced <- eval(el, env)
-      spliced_list <- as.list(spliced)
-      spliced_names <- names(spliced_list) %||% rep("", length(spliced_list))
-      result <- c(result, spliced_list)
-      res_names <- c(res_names, spliced_names)
+      spliced <- as.list(eval(el, env))
+      spliced_nms <- names(spliced) %||% rep("", length(spliced))
+      for (k in seq_along(spliced)) {
+        j <- j + 1L
+        result[[j]] <- spliced[[k]]
+        res_names[j] <- spliced_nms[k]
+      }
     } else {
-      result <- c(result, list(interp_walk(el, env, data)))
-      res_names <- c(res_names, nm)
+      j <- j + 1L
+      result[[j]] <- interp_walk(el, env, data)
+      res_names[j] <- if (!is.null(el_names)) el_names[i] else ""
     }
   }
 
+  result <- result[seq_len(j)]
+  res_names <- res_names[seq_len(j)]
   out <- as.call(result)
   if (any(nzchar(res_names))) {
     names(out) <- res_names
