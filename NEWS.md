@@ -1,5 +1,5 @@
 
-# lazyeval 0.2.3
+# lazyeval 0.3.0
 
 * This package has been retired. Please use rlang instead.
 
