@@ -1,4 +1,13 @@
 
+# lazyeval 0.2.3
+
+* This package has been retired. Please use rlang instead.
+
+* Removed all compiled C code to comply with R's C API restrictions.
+  Promise capture now uses `substitute()` and `parent.frame()` instead
+  of directly accessing promise internals. Promise chasing through
+  nested function calls is no longer supported.
+
 # lazyeval 0.2.2
 
 * Fix protection issues from rchk reports.
