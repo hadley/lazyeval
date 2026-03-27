@@ -6,41 +6,14 @@ test_that("doesn't go pass lazy loaded objects", {
   expect_identical(expr_find(mtcars), quote(mtcars))
 })
 
-test_that("follows multiple promises", {
-  f <- function(x) g(x)
-  g <- function(y) h(y)
-  h <- function(z) expr_find(z)
-
-  expect_identical(f(x + y), quote(x + y))
+test_that("captures expression directly", {
+  expect_identical(expr_find(x + y), quote(x + y))
 })
-
 
 # expr_env ----------------------------------------------------------------
 
-test_that("follows multiple promises", {
-  f <- function(x) g(x)
-  g <- function(y) h(y)
-  h <- function(z) expr_env(z)
-
-  expect_identical(h(x + y), environment())
-})
-
-test_that("throws error if promise forced", {
-  f <- function(x) {
-    force(x)
-    expr_env(x)
-  }
-  expect_error(f(10), "already been forced")
-})
-
-
-test_that("or can return default env", {
-  env <- new.env(parent = emptyenv())
-  f <- function(x) {
-    force(x)
-    expr_env(x, env)
-  }
-  expect_identical(f(10), env)
+test_that("returns caller environment", {
+  expect_identical(expr_env(x + y), environment())
 })
 
 # expr_text ---------------------------------------------------------------

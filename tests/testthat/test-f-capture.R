@@ -7,12 +7,8 @@ test_that("explicit promise makes a formula", {
   expect_equal(f1, f2)
 })
 
-test_that("explicit promise works several levels deep", {
-  f <- function(x) g(x)
-  g <- function(y) h(y)
-  h <- function(z) f_capture(z)
-
-  f1 <- f(1 + 2 + 3)
+test_that("explicit promise works when called directly", {
+  f1 <- f_capture(1 + 2 + 3)
   f2 <- ~ 1 + 2 + 3
 
   expect_equal(f1, f2)

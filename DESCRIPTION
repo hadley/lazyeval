@@ -9,7 +9,6 @@ Authors@R: c(
     person("RStudio", role = "cph")
     )
 License: GPL-3
-LazyData: true
 Depends:
     R (>= 3.1.0)
 Suggests:

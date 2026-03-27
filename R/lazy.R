@@ -49,7 +49,7 @@ lazy_ <- function(expr, env) {
 #' @rdname lazy_
 #' @export
 lazy <- function(expr, env = parent.frame(), .follow_symbols = TRUE) {
-  .Call(lazyeval_make_lazy, quote(expr), environment(), .follow_symbols)
+  lazy_(substitute(expr), env)
 }
 
 is.lazy <- function(x) inherits(x, "lazy")

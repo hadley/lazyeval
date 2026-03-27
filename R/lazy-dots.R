@@ -29,7 +29,19 @@
 #'
 #' c(lazy_dots(x = 1), lazy_dots(f))
 lazy_dots <- function(..., .follow_symbols = FALSE, .ignore_empty = FALSE) {
-  .Call(lazyeval_make_lazy_dots, environment(), .follow_symbols, .ignore_empty)
+  env <- parent.frame()
+  exprs <- eval(substitute(alist(...)))
+  nms <- names(exprs)
+
+  if (.ignore_empty) {
+    keep <- vapply(exprs, function(x) !identical(x, quote(expr = )), logical(1))
+    exprs <- exprs[keep]
+    if (!is.null(nms)) nms <- nms[keep]
+  }
+
+  dots <- lapply(exprs, function(expr) lazy_(expr, env))
+  if (!is.null(nms)) names(dots) <- nms
+  structure(dots, class = "lazy_dots")
 }
 
 is.lazy_dots <- function(x) inherits(x, "lazy_dots")

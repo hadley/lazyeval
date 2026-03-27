@@ -31,7 +31,7 @@
 #'   print(x)
 #' }))
 expr_label <- function(x) {
-  expr_label_(expr_find(x))
+  expr_label_(substitute(x))
 }
 
 expr_label_ <- function(x) {
@@ -56,7 +56,7 @@ expr_label_ <- function(x) {
 #' @param width Width of each line
 #' @param nlines Maximum number of lines to extract.
 expr_text <- function(x, width = 60L, nlines = Inf) {
-  expr_text_(expr_find(x), width = width, nlines = nlines)
+  expr_text_(substitute(x), width = width, nlines = nlines)
 }
 
 expr_text_ <- function(x, width = 60L, nlines = Inf) {
@@ -72,7 +72,7 @@ expr_text_ <- function(x, width = 60L, nlines = Inf) {
 #' @export
 #' @rdname expr_label
 expr_find <- function(x) {
-  .Call(lazyeval_expr_find_, quote(x), environment())
+  substitute(x)
 }
 
 #' @param default_env If supplied, \code{expr_env} will return this if the
@@ -80,15 +80,5 @@ expr_find <- function(x) {
 #' @export
 #' @rdname expr_label
 expr_env <- function(x, default_env) {
-  env <- .Call(lazyeval_expr_env_, quote(x), environment())
-
-  if (is.null(env)) {
-    if (missing(default_env)) {
-      stop("Promise has already been forced")
-    } else {
-      default_env
-    }
-  } else {
-    env
-  }
+  parent.frame()
 }

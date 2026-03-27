@@ -8,8 +8,8 @@
 #' Formally, \code{f_interp} is a quasiquote function, \code{uq()} is the
 #' unquote operator, and \code{uqs()} is the unquote splice operator.
 #' These terms have a rich history in LISP, and live on in modern languages
-#' like \href{Julia}{http://docs.julialang.org/en/release-0.1/manual/metaprogramming/}
-#' and \href{Racket}{https://docs.racket-lang.org/reference/quasiquote.html}.
+#' like \href{http://docs.julialang.org/en/release-0.1/manual/metaprogramming/}{Julia}
+#' and \href{https://docs.racket-lang.org/reference/quasiquote.html}{Racket}.
 #'
 #' @param f A one-sided formula.
 #' @param x For \code{uq} and \code{uqf}, a formula. For \code{uqs}, a
@@ -38,8 +38,55 @@
 #' f
 #' f_interp(f)
 f_interp <- function(f, data = NULL) {
-  f_rhs(f) <- .Call(lazyeval_interp_, f_rhs(f), f_env(f), data)
+  f_rhs(f) <- interp_walk(f_rhs(f), f_env(f), data)
   f
+}
+
+interp_walk <- function(x, env, data) {
+  if (!is.call(x))
+    return(x)
+
+  if (is.name(x[[1]])) {
+    fn_name <- as.character(x[[1]])
+
+    if (fn_name == "uq") {
+      uq_call <- call("uq", x[[2]], data)
+      return(eval(uq_call, env))
+    }
+    if (fn_name == "uqf") {
+      return(eval(x, env))
+    }
+  }
+
+  # Recursive case: rebuild call handling uqs splicing
+  # Convert to pairlist-style list to preserve names
+  elements <- as.list(x)
+  el_names <- names(elements)
+  result <- list()
+  res_names <- character(0)
+
+  for (i in seq_along(elements)) {
+    el <- elements[[i]]
+    nm <- if (!is.null(el_names)) el_names[i] else ""
+
+    # Check if this element is a uqs() call (only in argument position, not function position)
+    if (i > 1L && is.call(el) && is.name(el[[1]]) && as.character(el[[1]]) == "uqs") {
+      spliced <- eval(el, env)
+      spliced_list <- as.list(spliced)
+      spliced_names <- names(spliced_list) %||% rep("", length(spliced_list))
+      result <- c(result, spliced_list)
+      res_names <- c(res_names, spliced_names)
+    } else {
+      result <- c(result, list(interp_walk(el, env, data)))
+      res_names <- c(res_names, nm)
+    }
+  }
+
+  out <- as.call(result)
+  if (any(nzchar(res_names))) {
+    names(out) <- res_names
+  }
+  out
 }
 
 #' @export

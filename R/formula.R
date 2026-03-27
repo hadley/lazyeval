@@ -59,7 +59,13 @@ is_formula <- function(x) {
 #'
 #' f_env(~ x)
 f_rhs <- function(f) {
-  .Call(lazyeval_rhs, f)
+  if (!is_formula(f))
+    stop("`f` is not a formula", call. = FALSE)
+  switch(as.character(length(f)),
+    "2" = f[[2L]],
+    "3" = f[[3L]],
+    stop("Invalid formula", call. = FALSE)
+  )
 }
 
 #' @export
@@ -72,7 +78,13 @@ f_rhs <- function(f) {
 #' @export
 #' @rdname f_rhs
 f_lhs <- function(f) {
-  .Call(lazyeval_lhs, f)
+  if (!is_formula(f))
+    stop("`f` is not a formula", call. = FALSE)
+  switch(as.character(length(f)),
+    "2" = NULL,
+    "3" = f[[2L]],
+    stop("Invalid formula", call. = FALSE)
+  )
 }
 
 #' @export
@@ -85,7 +97,9 @@ f_lhs <- function(f) {
 #' @export
 #' @rdname f_rhs
 f_env <- function(f) {
-  .Call(lazyeval_env, f)
+  if (!is_formula(f))
+    stop("`f` is not a formula", call. = FALSE)
+  environment(f)
 }
 
 #' @export
@@ -163,11 +177,52 @@ f_unwrap <- function(f) {
 #' f_list("y" ~ x)
 #' f_list(a = "y" ~ a, ~ b, c = ~c)
 f_list <- function(...) {
-  .Call(lazyeval_lhs_name, list(...))
+  lhs_name(list(...))
 }
 
 #' @export
 #' @rdname f_list
 as_f_list <- function(x) {
-  .Call(lazyeval_lhs_name, x)
+  lhs_name(x)
+}
+
+lhs_as_name <- function(x) {
+  if (is.character(x)) {
+    if (length(x) != 1L)
+      stop("LHS must evaluate to a single string", call. = FALSE)
+    return(x)
+  }
+  if (is.name(x)) {
+    return(as.character(x))
+  }
+  if (is_formula(x) && length(x) == 2L) {
+    return(lhs_as_name(f_rhs(x)))
+  }
+  if (is_formula(x)) {
+    stop("RHS of LHS must be a single-sided formula", call. = FALSE)
+  }
+  stop("LHS must evaluate to a string or name", call. = FALSE)
+}
+
+lhs_name <- function(x) {
+  if (!is.list(x))
+    stop("`x` must be a list", call. = FALSE)
+
+  nms <- names(x) %||% rep("", length(x))
+
+  for (i in seq_along(x)) {
+    xi <- x[[i]]
+    if (!is_formula(xi) || length(xi) != 3L)
+      next
+
+    name <- eval(f_lhs(xi), f_env(xi))
+    if (!is.null(name)) {
+      nms[i] <- lhs_as_name(name)
+    }
+
+    x[[i]] <- f_new(f_rhs(xi), env = f_env(xi))
+  }
+
+  names(x) <- nms
+  x
 }

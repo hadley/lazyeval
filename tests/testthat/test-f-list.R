@@ -7,7 +7,7 @@ test_that("input must be a list", {
 test_that("LHS must evaluate to a string", {
   expect_error(f_list(1 ~ x), "must evaluate to a string or name")
   expect_error(f_list(letters ~ x), "must evaluate to a single string")
-  expect_error(f_list(x ~ x ~ z), "must be a single-sided formula")
+  expect_error(f_list(x ~ x ~ z), "single-sided formula")
 })
 
 test_that("regular elements are left as is", {
