@@ -47,7 +47,7 @@ This document is broadly organised according to the three types of non-standard 
 
 The approaches recommended here are quite different to my previous generation of recommendations. I am fairly confident these new approaches are correct, and will not have to change substantially again. The current tools make it easy to solve a number of practical problems that were previously challenging and are rooted in [long-standing theory](http://repository.readscheme.org/ftp/papers/pepm99/bawden.pdf).
 
-[^1]: Currently neither ggplot2 nor dplyr actually use these tools since I've only just figured it out. But I'll be working hard to make sure all my packages are consistent in the near future.
+[^1]: Currently neither ggplot2 nor dplyr actually use these tools since I've only just figured them out. But I'll be working hard to make sure all my packages are consistent in the near future.
 
 ## Labelling
 
@@ -60,7 +60,7 @@ my_label(x + y)
 
 There are two potential problems with this approach:
 
-1.  For long some expressions, `deparse()` generates a character vector with 
+1.  For long sum expressions, `deparse()` generates a character vector with 
     length > 1:
     
     ```{r}
@@ -93,7 +93,7 @@ my_label2(a + b)
 
 There are two variations on the theme of `expr_text()`:
 
-*   `expr_find()` find the underlying expression. It works similarly to 
+*   `expr_find()` finds the underlying expression. It works similarly to 
     `substitute()` but will follow a chain of promises back up to the original
     expression. This is often useful for [metaprogramming].
   
@@ -189,7 +189,7 @@ f_env(g)
 
 ### Evaluating a formula
 
-A formula captures delays the evaluation of an expression so you can later evaluate it with `f_eval()`:
+A formula capture delays the evaluation of an expression so you can later evaluate it with `f_eval()`:
 
 ```{r}
 f <- ~ 1 + 2 + 3
@@ -494,7 +494,7 @@ mogrify <- function(`_df`, ...) {
 
 (NB: the first argument is a non-syntactic name (i.e. it requires quoting with `` ` ``) so it doesn't accidentally match one of the names of the new variables.)
 
-`transmogrifty()` makes it easy to add new variables to a data frame:
+`transmogrify()` makes it easy to add new variables to a data frame:
 
 ```{r}
 df <- data.frame(x = 1:5, y = sample(5))
@@ -552,7 +552,7 @@ add_variable(df, "z", ~ x + y)
 
 In some situations you might want to eliminate the formula altogether, and allow the user to type expressions directly. I was once much enamoured with this approach (witness ggplot2, dplyr, ...). However, I now think that it should be used sparingly because explict quoting with `~` leads to simpler code, and makes it more clear to the user that something special is going on.
 
-That said, lazyeval does allow you to eliminate the `~` if you really want to. In this case, I recommend having both a NSE and SE version of the function. The SE version, which takes formuals, should have suffix `_`:
+That said, lazyeval does allow you to eliminate the `~` if you really want to. In this case, I recommend having both a NSE and SE version of the function. The SE version, which takes formulas, should have suffix `_`:
 
 ```{r}
 sieve_ <- function(df, condition) {
@@ -589,7 +589,7 @@ subscramble(df, x < 4)
 
 ### Dot-dot-dot
 
-If you want a `...` function that doesn't require formulas, I recommend that the SE version take a list of arguments, and the NSE version uses `dots_capture()` to capture multiple arguments as a list of formulas.
+If you want a `...` function that doesn't require formulas, I recommend that the SE version take a list of arguments, and the NSE version use `dots_capture()` to capture multiple arguments as a list of formulas.
 
 ```{r}
 mogrify_ <- function(`_df`, args) {
