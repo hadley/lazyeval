@@ -6,3 +6,5 @@
 ^revdep$
 ^vignettes/rsconnect$
 ^\.httr-oauth$
+^\.github$
+^codecov\.yml$
