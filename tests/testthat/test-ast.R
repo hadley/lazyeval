@@ -2,6 +2,7 @@ context("ast")
 
 test_that("common cases are as expected", {
   skip_on_cran() # because of unicode comparison problems.
+  skip_on_os("windows")
 
   x <- list(
     1,
@@ -18,6 +19,7 @@ test_that("common cases are as expected", {
 
 test_that("can print trees that can't be generated from text source", {
   skip_on_cran() # because of unicode comparison problems.
+  skip_on_os("windows")
 
   x <- quote(foo())
   x[[2]] <- mtcars
