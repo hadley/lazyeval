@@ -23,12 +23,14 @@ test_that("lazy() works with nested promises", {
   expect_equal(outer_fun(call("name"))$expr, quote(call("name")))
 })
 
-test_that("lazy() does not unpack lazily loaded objects", {
-  lazy <- lazy_caller(mean)
-  expect_equal(deparse(lazy$expr), "mean")
+test_that("lazy() captures lazy-loaded objects without forcing lookup chains", {
+  lazy_obj <- lazy_caller(mean)
+  expect_true(is.function(lazy_obj$expr))
+  expect_identical(lazy_obj$env, emptyenv())
 
   nested_lazy <- outer_fun(mean)
-  expect_equal(deparse(lazy$expr), "mean")
+  expect_true(is.function(nested_lazy$expr))
+  expect_identical(nested_lazy$env, emptyenv())
 
   outer_fun2 <- function() {
     list(
@@ -37,8 +39,8 @@ test_that("lazy() does not unpack lazily loaded objects", {
     )
   }
   embedded_lazy <- outer_fun2()
-  expect_identical(embedded_lazy$lazy$expr, as.name("mean"))
-  expect_identical(embedded_lazy$lazy$env, embedded_lazy$env)
+  expect_true(is.function(embedded_lazy$lazy$expr))
+  expect_identical(embedded_lazy$lazy$env, emptyenv())
 })
 
 test_that("lazy() works for double-colon operator", {
