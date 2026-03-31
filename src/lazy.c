@@ -19,8 +19,10 @@ static SEXP binding_as_lazy(SEXP sym, SEXP env, int follow_symbols) {
     case R_ENV_BINDING_TYPE_missing:
       return make_lazy_obj(R_MissingArg, R_EmptyEnv);
 
-    case R_ENV_BINDING_TYPE_value:
     case R_ENV_BINDING_TYPE_forced:
+      Rf_error("Promise has already been forced");
+
+    case R_ENV_BINDING_TYPE_value:
     case R_ENV_BINDING_TYPE_active: {
       if (follow_symbols && TYPEOF(sym) == SYMSXP && is_lazy_load_binding(where, sym)) {
         return make_lazy_obj(sym, env);
@@ -124,8 +126,10 @@ SEXP make_lazy_dots(SEXP env, SEXP follow_symbols_, SEXP ignore_empty_) {
       lazy = make_lazy_obj(R_MissingArg, R_EmptyEnv);
       break;
 
-    case DOT_TYPE_value:
-    case DOT_TYPE_forced: {
+    case DOT_TYPE_forced:
+      Rf_error("Promise has already been forced");
+
+    case DOT_TYPE_value: {
       SEXP dot = PROTECT(r_env_dot_get(env, i));
       lazy = make_lazy_obj(dot, R_EmptyEnv);
       UNPROTECT(1);
