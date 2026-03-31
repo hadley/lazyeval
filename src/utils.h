@@ -5,6 +5,7 @@
 
 bool is_lazy_load(SEXP x);
 bool is_lazy_load_binding(SEXP env, SEXP sym);
+bool is_forced_lazy_load_binding(SEXP env, SEXP sym);
 bool is_call_to(SEXP x, const char* f);
 bool is_formula(SEXP x);
 SEXP rhs(SEXP f);
