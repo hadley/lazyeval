@@ -39,8 +39,8 @@ test_that("lazy() errors on forced promises", {
 
 test_that("lazy() works with formula promises", {
   f <- function(x) lazy(x)
-  result <- f(~a + b)
-  expect_equal(result$expr, quote(~a + b))
+  result <- f(~ a + b)
+  expect_equal(result$expr, quote(~ a + b))
 })
 
 test_that("lazy_dots() errors on forced promises", {
