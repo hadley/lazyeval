@@ -31,15 +31,28 @@ static SEXP binding_expr(SEXP env, SEXP sym) {
       if (inner_where == r_envs.empty)
         return expr;
 
-      if (r_env_binding_type(inner_where, expr) != R_ENV_BINDING_TYPE_delayed)
+      switch (r_env_binding_type(inner_where, expr)) {
+      case R_ENV_BINDING_TYPE_forced:
+        if (is_forced_lazy_load_binding(inner_where, expr)) {
+          return expr;
+        }
+        return r_env_binding_forced_expr(inner_where, expr);
+
+      case R_ENV_BINDING_TYPE_value:
+      case R_ENV_BINDING_TYPE_active:
         return expr;
 
-      if (is_lazy_load_binding(inner_where, expr))
-        return expr;
+      case R_ENV_BINDING_TYPE_delayed:
+        if (is_lazy_load_binding(inner_where, expr))
+          return expr;
 
-      sym = expr;
-      env = expr_env;
-      continue;
+        sym = expr;
+        env = expr_env;
+        continue;
+
+      default:
+        return expr;
+      }
     }
     }
   }

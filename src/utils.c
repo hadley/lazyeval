@@ -33,6 +33,13 @@ bool is_lazy_load_binding(SEXP env, SEXP sym) {
   return is_call_to(r_env_binding_delayed_expr(env, sym), "lazyLoadDBfetch");
 }
 
+bool is_forced_lazy_load_binding(SEXP env, SEXP sym) {
+  if (r_env_binding_type(env, sym) != R_ENV_BINDING_TYPE_forced)
+    return false;
+
+  return is_call_to(r_env_binding_forced_expr(env, sym), "lazyLoadDBfetch");
+}
+
 SEXP findLast(SEXP x) {
   SEXP cons = x;
   while(CDR(cons) != R_NilValue)
