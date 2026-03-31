@@ -29,7 +29,7 @@ static SEXP binding_as_lazy(SEXP sym, SEXP env, int follow_symbols) {
       }
 
       SEXP value = PROTECT(r_env_get(where, sym));
-      SEXP out = make_lazy_obj(value, R_EmptyEnv);
+      SEXP out = make_lazy_obj(value, env);
       UNPROTECT(1);
       return out;
     }

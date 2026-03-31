@@ -1,9 +1,8 @@
 # Revdeps
 
-## New problems (2)
+## New problems (1)
 
-|package   |version |error  |warning |note |
-|:---------|:-------|:------|:-------|:----|
-|[hyperSpec](problems.md#hyperspec)|0.100.3 |__+1__ |        |     |
+|package |version |error  |warning |note |
+|:-------|:-------|:------|:-------|:----|
 |[lidR](problems.md#lidr)|4.2.3   |__+1__ |        |1    |
 
