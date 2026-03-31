@@ -1,4 +1,4 @@
-#include <Rinternals.h>
+#include <rlang.h>
 #include <R_ext/Rdynload.h>
 
 extern SEXP env(SEXP);
@@ -21,6 +21,7 @@ static const R_CallMethodDef call_entries[] = {
   {"lazyeval_make_lazy",            (DL_FUNC) &make_lazy, 3},
   {"lazyeval_make_lazy_dots",       (DL_FUNC) &make_lazy_dots, 3},
   {"lazyeval_rhs",                  (DL_FUNC) &rhs, 1},
+  {"r_init_library",                (DL_FUNC) &r_init_library, 1},
   {NULL, NULL, 0}
 };
 
