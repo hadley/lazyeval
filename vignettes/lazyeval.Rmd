@@ -494,7 +494,7 @@ mogrify <- function(`_df`, ...) {
 
 (NB: the first argument is a non-syntactic name (i.e. it requires quoting with `` ` ``) so it doesn't accidentally match one of the names of the new variables.)
 
-`transmogrifty()` makes it easy to add new variables to a data frame:
+`mogrify()` makes it easy to add new variables to a data frame:
 
 ```{r}
 df <- data.frame(x = 1:5, y = sample(5))
@@ -530,7 +530,7 @@ mogrify <- function(`_df`, ...) {
 }
 ```
 
-`add_new()` becomes much simpler:
+`add_variable()` becomes much simpler:
 
 ```{r}
 add_variable <- function(df, name, expr) {
