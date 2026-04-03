@@ -8,8 +8,7 @@
 #' Formally, \code{f_interp} is a quasiquote function, \code{uq()} is the
 #' unquote operator, and \code{uqs()} is the unquote splice operator.
 #' These terms have a rich history in LISP, and live on in modern languages
-#' like \href{Julia}{http://docs.julialang.org/en/release-0.1/manual/metaprogramming/}
-#' and \href{Racket}{https://docs.racket-lang.org/reference/quasiquote.html}.
+#' like Julia and Racket.
 #'
 #' @param f A one-sided formula.
 #' @param x For \code{uq} and \code{uqf}, a formula. For \code{uqs}, a

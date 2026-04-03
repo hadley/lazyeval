@@ -20,5 +20,5 @@ Suggests:
     testthat,
     covr
 VignetteBuilder: knitr
-RoxygenNote: 6.1.1
+RoxygenNote: 7.3.3
 Config/build/compilation-database: true

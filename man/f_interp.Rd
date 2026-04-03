@@ -34,8 +34,7 @@ the form \code{uqs(x)}.
 Formally, \code{f_interp} is a quasiquote function, \code{uq()} is the
 unquote operator, and \code{uqs()} is the unquote splice operator.
 These terms have a rich history in LISP, and live on in modern languages
-like \href{Julia}{http://docs.julialang.org/en/release-0.1/manual/metaprogramming/}
-and \href{Racket}{https://docs.racket-lang.org/reference/quasiquote.html}.
+like Julia and Racket.
 }
 
 \examples{
