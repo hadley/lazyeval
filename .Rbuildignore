@@ -8,3 +8,7 @@
 ^\.httr-oauth$
 ^\.github$
 ^codecov\.yml$
+(^|/)\.clangd$
+^\.cache$
+^compile_commands\.json$
+^dev-notes$

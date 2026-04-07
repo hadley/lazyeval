@@ -47,7 +47,7 @@ expr_label(10)
 # Names a quoted with ``
 expr_label(x)
 # Strings are encoded
-expr_label("a\\nb")
+expr_label("a\nb")
 # Expressions are captured
 expr_label(a + b + c)
 # Long expressions are collapsed

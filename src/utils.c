@@ -2,6 +2,7 @@
 #include <R.h>
 #include <Rinternals.h>
 #include <stdbool.h>
+#include <rlang.h>
 
 bool is_symbol_str(SEXP sym, const char* f) {
   return !strcmp(CHAR(PRINTNAME(sym)), f);
@@ -18,11 +19,20 @@ bool is_call_to(SEXP x, const char* f) {
     return false;
 }
 
-bool is_lazy_load(SEXP x) {
-  if (TYPEOF(x) != PROMSXP)
+
+
+bool is_lazy_load_binding(SEXP env, SEXP sym) {
+  if (r_env_binding_type(env, sym) != R_ENV_BINDING_TYPE_delayed)
     return false;
 
-  return is_call_to(PREXPR(x), "lazyLoadDBfetch");
+  return is_call_to(r_env_binding_delayed_expr(env, sym), "lazyLoadDBfetch");
+}
+
+bool is_forced_lazy_load_binding(SEXP env, SEXP sym) {
+  if (r_env_binding_type(env, sym) != R_ENV_BINDING_TYPE_forced)
+    return false;
+
+  return is_call_to(r_env_binding_forced_expr(env, sym), "lazyLoadDBfetch");
 }
 
 SEXP findLast(SEXP x) {

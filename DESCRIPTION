@@ -1,5 +1,5 @@
 Package: lazyeval
-Version: 0.2.2
+Version: 0.2.3
 Title: Lazy (Non-Standard) Evaluation
 Description: An alternative approach to non-standard evaluation using
     formulas. Provides a full implementation of LISP style 'quasiquotation',
@@ -20,4 +20,5 @@ Suggests:
     testthat,
     covr
 VignetteBuilder: knitr
-RoxygenNote: 6.1.1
+RoxygenNote: 7.3.3
+Config/build/compilation-database: true

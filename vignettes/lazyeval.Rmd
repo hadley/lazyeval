@@ -45,7 +45,7 @@ This document describes lazyeval, a package that provides principled tools to pe
 
 This document is broadly organised according to the three types of non-standard evaluation described above. The main difference is that after [labelling], we'll take a detour to learn more about [formulas]. You're probably familiar with formulas from linear models (e.g. `lm(mpg ~ displ, data = mtcars)`) but formulas are more than just a tool for modelling: they are a general way of capturing an unevaluated expression. 
 
-The approaches recommended here are quite different to my previous generation of recommendations. I am fairly confident these new approaches are correct, and will not have to change substantially again. The current tools make it easy to solve a number of practical problems that were previously challenging and are rooted in [long-standing theory](http://repository.readscheme.org/ftp/papers/pepm99/bawden.pdf).
+The approaches recommended here are quite different to my previous generation of recommendations. I am fairly confident these new approaches are correct, and will not have to change substantially again. The current tools make it easy to solve a number of practical problems that were previously challenging and are rooted in long-standing theory.
 
 [^1]: Currently neither ggplot2 nor dplyr actually use these tools since I've only just figured it out. But I'll be working hard to make sure all my packages are consistent in the near future.
 

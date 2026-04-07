@@ -1,59 +1,86 @@
-#include <R.h>
-#include <Rdefines.h>
+#define R_NO_REMAP
+#include <rlang.h>
+#include <Rinternals.h>
 #include "utils.h"
 
-SEXP promise_as_lazy(SEXP promise, SEXP env, int follow_symbols) {
-  // recurse until we find the real promise, not a promise of a promise
-  while(TYPEOF(promise) == PROMSXP) {
-    if (PRENV(promise) == R_NilValue) {
-      Rf_error("Promise has already been forced");
+static SEXP make_lazy_obj(SEXP expr, SEXP env);
+
+static SEXP binding_as_lazy(SEXP sym, SEXP env, int follow_symbols) {
+  while (1) {
+    SEXP where = r_env_until(env, sym, r_envs.empty);
+    if (where == r_envs.empty) {
+      Rf_error("object '%s' not found", CHAR(PRINTNAME(sym)));
     }
 
-    env = PRENV(promise);
-    promise = PREXPR(promise);
+    switch (r_env_binding_type(where, sym)) {
+    case R_ENV_BINDING_TYPE_unbound:
+      Rf_error("object '%s' not found", CHAR(PRINTNAME(sym)));
 
-    // If the promise is threaded through multiple functions, we'll
-    // get some symbols along the way. If the symbol is bound to a promise
-    // keep going on up
-    if (follow_symbols && TYPEOF(promise) == SYMSXP) {
-      SEXP obj = findVar(promise, env);
+    case R_ENV_BINDING_TYPE_missing:
+      return make_lazy_obj(R_MissingArg, R_EmptyEnv);
 
-      if (obj == R_MissingArg || obj == R_UnboundValue)
-        break;
+    case R_ENV_BINDING_TYPE_forced:
+      Rf_error("Promise has already been forced");
 
-      if (TYPEOF(obj) == PROMSXP && is_lazy_load(obj))
-        break;
+    case R_ENV_BINDING_TYPE_value:
+    case R_ENV_BINDING_TYPE_active: {
+      if (follow_symbols && TYPEOF(sym) == SYMSXP && is_lazy_load_binding(where, sym)) {
+        return make_lazy_obj(sym, env);
+      }
 
-      promise = obj;
+      SEXP value = PROTECT(r_env_get(where, sym));
+      SEXP out = make_lazy_obj(value, env);
+      UNPROTECT(1);
+      return out;
+    }
+
+    case R_ENV_BINDING_TYPE_delayed: {
+      SEXP expr = r_env_binding_delayed_expr(where, sym);
+      SEXP expr_env = r_env_binding_delayed_env(where, sym);
+
+      if (follow_symbols && TYPEOF(expr) == SYMSXP) {
+        SEXP inner_where = r_env_until(expr_env, expr, r_envs.empty);
+
+        if (inner_where == r_envs.empty)
+          return make_lazy_obj(expr, expr_env);
+
+        if (r_env_binding_type(inner_where, expr) == R_ENV_BINDING_TYPE_missing)
+          return make_lazy_obj(expr, expr_env);
+
+        if (is_lazy_load_binding(inner_where, expr))
+          return make_lazy_obj(expr, expr_env);
+
+        sym = expr;
+        env = expr_env;
+        continue;
+      }
+
+      return make_lazy_obj(expr, expr_env);
+    }
     }
   }
+}
 
-  // Make named list for output
-  SEXP lazy = PROTECT(allocVector(VECSXP, 2));
-  MARK_NOT_MUTABLE(promise);
-  SET_VECTOR_ELT(lazy, 0, promise);
+static SEXP make_lazy_obj(SEXP expr, SEXP env) {
+  SEXP lazy = PROTECT(Rf_allocVector(VECSXP, 2));
+  MARK_NOT_MUTABLE(expr);
+  SET_VECTOR_ELT(lazy, 0, expr);
   SET_VECTOR_ELT(lazy, 1, env);
 
-  SEXP names = PROTECT(allocVector(STRSXP, 2));
-  SET_STRING_ELT(names, 0, mkChar("expr"));
-  SET_STRING_ELT(names, 1, mkChar("env"));
+  SEXP names = PROTECT(Rf_allocVector(STRSXP, 2));
+  SET_STRING_ELT(names, 0, Rf_mkChar("expr"));
+  SET_STRING_ELT(names, 1, Rf_mkChar("env"));
 
-  setAttrib(lazy, install("names"), names);
-  setAttrib(lazy, install("class"), PROTECT(mkString("lazy")));
+  Rf_setAttrib(lazy, Rf_install("names"), names);
+  Rf_setAttrib(lazy, Rf_install("class"), PROTECT(Rf_mkString("lazy")));
 
   UNPROTECT(3);
-
   return lazy;
 }
 
 SEXP make_lazy(SEXP name, SEXP env, SEXP follow_symbols_) {
-  SEXP promise = PROTECT(findVar(name, env));
-  int follow_symbols = asLogical(follow_symbols_);
-
-  SEXP out = promise_as_lazy(promise, env, follow_symbols);
-
-  UNPROTECT(1);
-  return out;
+  int follow_symbols = Rf_asLogical(follow_symbols_);
+  return binding_as_lazy(name, env, follow_symbols);
 }
 
 int is_missing(SEXP x) {
@@ -61,49 +88,93 @@ int is_missing(SEXP x) {
 }
 
 SEXP make_lazy_dots(SEXP env, SEXP follow_symbols_, SEXP ignore_empty_) {
-  SEXP dots = PROTECT(findVar(R_DotsSymbol, env));
-  int follow_symbols = asLogical(follow_symbols_);
-  int ignore_empty = asLogical(ignore_empty_);
+  int follow_symbols = Rf_asLogical(follow_symbols_);
+  int ignore_empty = Rf_asLogical(ignore_empty_);
 
-  if (dots == R_MissingArg) {
-    SEXP out = PROTECT(Rf_allocVector(VECSXP, 0));
-    setAttrib(out, install("class"), PROTECT(mkString("lazy_dots")));
-    UNPROTECT(3);
-    return out;
+  env = r_env_until_dots(env);
+  if (env == r_envs.empty) {
+    Rf_error("'...' used in an incorrect context");
   }
 
-  // Figure out how many elements in dots
+  r_ssize n_dots = r_env_dots_length(env);
+
   int n = 0;
-  for(SEXP nxt = dots; nxt != R_NilValue; nxt = CDR(nxt)) {
-    if (ignore_empty && is_missing(CAR(nxt)))
+  for (r_ssize i = 0; i < n_dots; ++i) {
+    if (ignore_empty && r_env_dot_type(env, i) == DOT_TYPE_missing)
       continue;
-
-    n++;
+    ++n;
   }
 
-  // Allocate list to store results
-  SEXP lazy_dots = PROTECT(allocVector(VECSXP, n));
-  SEXP names = PROTECT(allocVector(STRSXP, n));
+  SEXP lazy_dots = PROTECT(Rf_allocVector(VECSXP, n));
+  SEXP dot_names = r_env_dots_names(env);
+  SEXP names = PROTECT(Rf_allocVector(STRSXP, n));
 
-  // Iterate through all elements of dots, converting promises into lazy exprs
-  int i = 0;
-  for(SEXP nxt = dots; nxt != R_NilValue; nxt = CDR(nxt)) {
-    SEXP promise = CAR(nxt);
+  for (int i = 0; i < n; ++i) {
+    SET_STRING_ELT(names, i, Rf_mkChar(""));
+  }
 
-    if (ignore_empty && is_missing(promise))
+  int j = 0;
+  for (r_ssize i = 0; i < n_dots; ++i) {
+    r_dot_type_t type = r_env_dot_type(env, i);
+
+    if (ignore_empty && type == DOT_TYPE_missing)
       continue;
 
-    SEXP lazy = promise_as_lazy(promise, env, follow_symbols);
-    SET_VECTOR_ELT(lazy_dots, i, lazy);
-    if (TAG(nxt) != R_NilValue)
-      SET_STRING_ELT(names, i, PRINTNAME(TAG(nxt)));
+    SEXP lazy;
+    switch (type) {
+    case DOT_TYPE_missing:
+      lazy = make_lazy_obj(R_MissingArg, R_EmptyEnv);
+      break;
 
-    i++;
+    case DOT_TYPE_forced:
+      Rf_error("Promise has already been forced");
+
+    case DOT_TYPE_value: {
+      SEXP dot = PROTECT(r_env_dot_get(env, i));
+      lazy = make_lazy_obj(dot, R_EmptyEnv);
+      UNPROTECT(1);
+      break;
+    }
+
+    case DOT_TYPE_delayed: {
+      SEXP expr = r_env_dot_delayed_expr(env, i);
+      SEXP expr_env = r_env_dot_delayed_env(env, i);
+
+      if (follow_symbols && TYPEOF(expr) == SYMSXP) {
+        SEXP inner_where = r_env_until(expr_env, expr, r_envs.empty);
+
+        if (inner_where == r_envs.empty) {
+          lazy = make_lazy_obj(expr, expr_env);
+        } else if (r_env_binding_type(inner_where, expr) == R_ENV_BINDING_TYPE_missing) {
+          lazy = make_lazy_obj(expr, expr_env);
+        } else if (is_lazy_load_binding(inner_where, expr)) {
+          lazy = make_lazy_obj(expr, expr_env);
+        } else {
+          lazy = binding_as_lazy(expr, expr_env, follow_symbols);
+        }
+      } else {
+        lazy = make_lazy_obj(expr, expr_env);
+      }
+      break;
+    }
+    }
+
+    SET_VECTOR_ELT(lazy_dots, j, lazy);
+
+    if (dot_names != R_NilValue) {
+      SEXP nm = STRING_ELT(dot_names, i);
+      if (nm != NA_STRING && CHAR(nm)[0] != '\0')
+        SET_STRING_ELT(names, j, nm);
+    }
+
+    ++j;
   }
-  setAttrib(lazy_dots, install("names"), names);
-  setAttrib(lazy_dots, install("class"), PROTECT(mkString("lazy_dots")));
 
-  UNPROTECT(4);
+  if (n > 0) {
+    Rf_setAttrib(lazy_dots, Rf_install("names"), names);
+  }
+  Rf_setAttrib(lazy_dots, Rf_install("class"), PROTECT(Rf_mkString("lazy_dots")));
 
+  UNPROTECT(3);
   return lazy_dots;
 }

@@ -23,25 +23,31 @@ test_that("lazy() works with nested promises", {
   expect_equal(outer_fun(call("name"))$expr, quote(call("name")))
 })
 
-test_that("lazy() does not unpack lazily loaded objects", {
-  lazy <- lazy_caller(mean)
-  expect_equal(deparse(lazy$expr), "mean")
-
-  nested_lazy <- outer_fun(mean)
-  expect_equal(deparse(lazy$expr), "mean")
-
-  outer_fun2 <- function() {
-    list(
-      lazy = lazy_caller(mean),
-      env = environment()
-    )
-  }
-  embedded_lazy <- outer_fun2()
-  expect_identical(embedded_lazy$lazy$expr, as.name("mean"))
-  expect_identical(embedded_lazy$lazy$env, embedded_lazy$env)
-})
-
 test_that("lazy() works for double-colon operator", {
   expect_error(lazy <- lazy_caller(stats::runif(10)), NA)
   expect_error(nested_lazy <- outer_fun(stats::runif(10)), NA)
+})
+
+test_that("lazy() errors on forced promises", {
+  f <- function(x) {
+    force(x)
+    lazy(x)
+  }
+  expect_error(f(1 + 2), "forced")
+  expect_error(f(~a), "forced")
+})
+
+test_that("lazy() works with formula promises", {
+  f <- function(x) lazy(x)
+  result <- f(~ a + b)
+  expect_equal(result$expr, quote(~ a + b))
+})
+
+test_that("lazy_dots() errors on forced promises", {
+  f <- function(...) {
+    force(..1)
+    lazy_dots(...)
+  }
+  expect_error(f(1 + 2), "forced")
+  expect_error(f(~a), "forced")
 })

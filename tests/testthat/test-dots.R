@@ -1,4 +1,3 @@
-
 context("lazy_dots")
 
 test_that("lazy_dots works with no args", {
