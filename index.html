@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">lazyeval</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.3</span>
       </span>
     </div>
 
@@ -76,7 +76,7 @@
 <div class="section level1">
 <div class="page-header"><h1 id="lazyeval">lazyeval<a class="anchor" aria-label="anchor" href="#lazyeval"></a>
 </h1></div>
-<p><a href="https://www.tidyverse.org/lifecycle/#retired" class="external-link"><img src="https://img.shields.io/badge/lifecycle-retired-orange.svg" alt="Lifecycle: retired"></a> <a href="https://travis-ci.org/hadley/lazyeval" class="external-link"><img src="https://travis-ci.org/hadley/lazyeval.png?branch=master" alt="Build Status"></a> <a href="http://codecov.io/github/hadley/lazyeval?branch=master" class="external-link"><img src="http://codecov.io/github/hadley/lazyeval/coverage.svg?branch=master" alt="Coverage Status"></a></p>
+<p><a href="https://lifecycle.r-lib.org/articles/stages.html" class="external-link"><img src="https://img.shields.io/badge/lifecycle-deprecated-orange.svg" alt="Lifecycle: deprecated"></a></p>
 <p>The lazyeval package provides tools that make it easier to correctly implement non-standard evaluation (NSE) in R. You use lazy evaluation by requiring the user to “quote” specially evaluated arguments with <code>~</code>, and then using the lazyeval package to compute with those formulas. It is also possible to eliminate the use of the <code>~</code> by converting promises to formulas. This does make programming with such functions a little harder, but it can be worth it in certain situations. See <code><a href="articles/lazyeval.html">vignette("lazyeval")</a></code> for more details.</p>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
@@ -90,8 +90,8 @@
 <span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"hadley/lazyeval"</span>, build_vignettes <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="status-lifecycle-retired">Status <a href="https://www.tidyverse.org/lifecycle/#retired" class="external-link"><img src="https://img.shields.io/badge/lifecycle-retired-orange.svg" alt="Lifecycle: retired"></a>
-<a class="anchor" aria-label="anchor" href="#status-lifecycle-retired"></a>
+<h2 id="status-lifecycle-deprecated">Status <a href="https://lifecycle.r-lib.org/articles/stages.html" class="external-link"><img src="https://img.shields.io/badge/lifecycle-deprecated-orange.svg" alt="Lifecycle: deprecated"></a>
+<a class="anchor" aria-label="anchor" href="#status-lifecycle-deprecated"></a>
 </h2>
 <p>lazyeval is retired: this means only changes necessary to keep it on CRAN will be made. We recommend using <a href="https://rlang.r-lib.org/" class="external-link">rlang</a> instead.</p>
 </div>

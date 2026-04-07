@@ -20,7 +20,7 @@ the same."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/m
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">lazyeval</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.3</span>
       </span>
     </div>
 
@@ -98,7 +98,7 @@ or something <code><a href="as.lazy.html">as.lazy_dots()</a></code> can coerce..
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">make_call</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/substitute.html" class="external-link">quote</a></span><span class="op">(</span><span class="va">f</span><span class="op">)</span>, <span class="fu"><a href="lazy_dots.html">lazy_dots</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;lazy&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   expr: f(x = 1, 2)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   env:  &lt;environment: 0x556b05d68ec8&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   env:  &lt;environment: 0x55b051f7e888&gt;</span>
 <span class="r-in"><span><span class="fu">make_call</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/substitute.html" class="external-link">quote</a></span><span class="op">(</span><span class="va">f</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fl">1</span>, y <span class="op">=</span> <span class="op">~</span><span class="va">x</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;lazy&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   expr: f(x = 1, y = x)</span>
@@ -106,7 +106,7 @@ or something <code><a href="as.lazy.html">as.lazy_dots()</a></code> can coerce..
 <span class="r-in"><span><span class="fu">make_call</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/substitute.html" class="external-link">quote</a></span><span class="op">(</span><span class="va">f</span><span class="op">)</span>, <span class="op">~</span><span class="va">x</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;lazy&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   expr: f(x)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   env:  &lt;environment: 0x556b05d68ec8&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   env:  &lt;environment: 0x55b051f7e888&gt;</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># If no known or no common environment, fails back to baseenv()</span></span></span>
 <span class="r-in"><span><span class="fu">make_call</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/substitute.html" class="external-link">quote</a></span><span class="op">(</span><span class="va">f</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/substitute.html" class="external-link">quote</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span></span></span>
