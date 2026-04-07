@@ -1,3 +1,5 @@
+# lazyeval (development version)
+
 # lazyeval 0.2.3
 
 * Fixes for CRAN checks. The new implementation is now compliant with the public C API of R and might differ from the historical one in subtle ways.
