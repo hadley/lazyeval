@@ -21,7 +21,7 @@ simpler."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/ma
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">lazyeval</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.3.9000</span>
       </span>
     </div>
 
@@ -96,19 +96,19 @@ dropped.</p></dd>
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">f_capture</span><span class="op">(</span><span class="va">a</span> <span class="op">+</span> <span class="va">b</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ~a + b</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x55b0511ed4b8&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x560f8e7cfbb8&gt;</span>
 <span class="r-in"><span><span class="fu">dots_capture</span><span class="op">(</span><span class="va">a</span> <span class="op">+</span> <span class="va">b</span>, <span class="va">c</span> <span class="op">+</span> <span class="va">d</span>, <span class="va">e</span> <span class="op">+</span> <span class="va">f</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[1]]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ~a + b</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x55b0511ed4b8&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x560f8e7cfbb8&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[2]]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ~c + d</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x55b0511ed4b8&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x560f8e7cfbb8&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[3]]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ~e + f</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x55b0511ed4b8&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x560f8e7cfbb8&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># These functions will follow a chain of promises back to the</span></span></span>
@@ -118,7 +118,7 @@ dropped.</p></dd>
 <span class="r-in"><span><span class="va">h</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">z</span><span class="op">)</span> <span class="fu">f_capture</span><span class="op">(</span><span class="va">z</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">f</span><span class="op">(</span><span class="va">a</span> <span class="op">+</span> <span class="va">b</span> <span class="op">+</span> <span class="va">c</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ~a + b + c</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x55b0511ed4b8&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x560f8e7cfbb8&gt;</span>
 </code></pre></div>
     </div>
   </div>

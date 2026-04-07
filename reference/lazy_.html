@@ -19,7 +19,7 @@ programming."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/lib
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">lazyeval</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.3.9000</span>
       </span>
     </div>
 
@@ -110,18 +110,18 @@ can correctly replay it in the future.</p>
 <span class="r-in"><span><span class="fu">f</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;lazy&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   expr: b - a</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   env:  &lt;environment: 0x55b050e0c198&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   env:  &lt;environment: 0x560f8e424658&gt;</span>
 <span class="r-in"><span><span class="fu">f</span><span class="op">(</span><span class="va">a</span> <span class="op">+</span> <span class="va">b</span> <span class="op">/</span> <span class="va">c</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;lazy&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   expr: a + b/c</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   env:  &lt;environment: 0x55b050d23308&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   env:  &lt;environment: 0x560f8e333608&gt;</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Lazy also works when called from the global environment. This makes</span></span></span>
 <span class="r-in"><span><span class="co"># easy to play with interactively.</span></span></span>
 <span class="r-in"><span><span class="fu">lazy</span><span class="op">(</span><span class="va">a</span> <span class="op">+</span> <span class="va">b</span> <span class="op">/</span> <span class="va">c</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;lazy&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   expr: a + b/c</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   env:  &lt;environment: 0x55b050d23308&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   env:  &lt;environment: 0x560f8e333608&gt;</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># By default, lazy will climb all the way back to the initial promise</span></span></span>
 <span class="r-in"><span><span class="co"># This is handy if you have if you have nested functions:</span></span></span>
@@ -130,15 +130,15 @@ can correctly replay it in the future.</p>
 <span class="r-in"><span><span class="fu">f</span><span class="op">(</span><span class="va">a</span> <span class="op">+</span> <span class="va">b</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;lazy&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   expr: a + b</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   env:  &lt;environment: 0x55b050d23308&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   env:  &lt;environment: 0x560f8e333608&gt;</span>
 <span class="r-in"><span><span class="fu">g</span><span class="op">(</span><span class="va">a</span> <span class="op">+</span> <span class="va">b</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;lazy&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   expr: a + b</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   env:  &lt;environment: 0x55b050d23308&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   env:  &lt;environment: 0x560f8e333608&gt;</span>
 <span class="r-in"><span><span class="fu">h</span><span class="op">(</span><span class="va">a</span> <span class="op">+</span> <span class="va">b</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;lazy&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   expr: a + b</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   env:  &lt;environment: 0x55b050d23308&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   env:  &lt;environment: 0x560f8e333608&gt;</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># To avoid this behavour, set .follow_symbols = FALSE</span></span></span>
 <span class="r-in"><span><span class="co"># See vignette("chained-promises") for details</span></span></span>

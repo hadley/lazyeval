@@ -19,7 +19,7 @@ the form uqs(x)."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">lazyeval</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.3.9000</span>
       </span>
     </div>
 
@@ -105,21 +105,21 @@ like Julia and Racket.</p>
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">f_interp</span><span class="op">(</span><span class="va">x</span> <span class="op">~</span> <span class="fl">1</span> <span class="op">+</span> <span class="fu">uq</span><span class="op">(</span><span class="fl">1</span> <span class="op">+</span> <span class="fl">2</span> <span class="op">+</span> <span class="fl">3</span><span class="op">)</span> <span class="op">+</span> <span class="fl">10</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> x ~ 1 + 6 + 10</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x55b0513eaa00&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x560f8e8f7b30&gt;</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Use uqs() if you want to add multiple arguments to a function</span></span></span>
 <span class="r-in"><span><span class="co"># It must evaluate to a list</span></span></span>
 <span class="r-in"><span><span class="va">args</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">f_interp</span><span class="op">(</span><span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span> <span class="fu">uqs</span><span class="op">(</span><span class="va">args</span><span class="op">)</span> <span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ~mean(1:10, na.rm = TRUE)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x55b0513eaa00&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x560f8e8f7b30&gt;</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># You can combine the two</span></span></span>
 <span class="r-in"><span><span class="va">var</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/substitute.html" class="external-link">quote</a></span><span class="op">(</span><span class="va">xyz</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">extra_args</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>trim <span class="op">=</span> <span class="fl">0.9</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">f_interp</span><span class="op">(</span><span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span> <span class="fu">uq</span><span class="op">(</span><span class="va">var</span><span class="op">)</span> , <span class="fu">uqs</span><span class="op">(</span><span class="va">extra_args</span><span class="op">)</span> <span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ~mean(xyz, trim = 0.9)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x55b0513eaa00&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x560f8e8f7b30&gt;</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">foo</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">n</span><span class="op">)</span> <span class="op">{</span></span></span>
 <span class="r-in"><span>  <span class="op">~</span> <span class="fl">1</span> <span class="op">+</span> <span class="fu">uq</span><span class="op">(</span><span class="va">n</span><span class="op">)</span></span></span>
@@ -127,10 +127,10 @@ like Julia and Racket.</p>
 <span class="r-in"><span><span class="va">f</span> <span class="op">&lt;-</span> <span class="fu">foo</span><span class="op">(</span><span class="fl">10</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">f</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ~1 + uq(n)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x55b0519d12e0&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x560f8eee7510&gt;</span>
 <span class="r-in"><span><span class="fu">f_interp</span><span class="op">(</span><span class="va">f</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ~1 + 10</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x55b0519d12e0&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x560f8eee7510&gt;</span>
 </code></pre></div>
     </div>
   </div>
