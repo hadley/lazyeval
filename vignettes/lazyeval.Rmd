@@ -113,7 +113,7 @@ There are two variations on the theme of `expr_text()`:
 1.  `plot()` uses `deparse(substitute(x))` to generate labels for the x and y
     axes. Can you generate input that causes it to display bad labels?
     Write your own wrapper around `plot()` that uses `expr_label()` to compute
-    `xlim` and `ylim`.
+    `xlab` and `ylab`.
     
 1.  Create a simple implementation of `mean()` that stops with an informative
     error message if the argument is not numeric:
@@ -128,7 +128,7 @@ There are two variations on the theme of `expr_text()`:
     #> Error: "a" is not a numeric vector.
     ```
 
-1.  Read the source code for `expr_text()`. How does it work? What additional
+1.  Read the source code for `lazyeval:::expr_text_()`. How does it work? What additional
     arguments to `deparse()` does it use?
 
 ## Formulas
@@ -189,7 +189,7 @@ f_env(g)
 
 ### Evaluating a formula
 
-A formula captures delays the evaluation of an expression so you can later evaluate it with `f_eval()`:
+A formula captures an expression so you can later evaluate it with `f_eval()`:
 
 ```{r}
 f <- ~ 1 + 2 + 3
@@ -426,7 +426,7 @@ There are two ways that this function might fail:
     threshold_x(df3, 3)
     ```
 
-These failures are partiuclarly pernicious because instead of throwing an error they silently produce the wrong answer. Both failures arise because `f_eval()` introduces ambiguity by looking in two places for each name: the supplied data and formula environment. 
+These failures are particularly pernicious because instead of throwing an error they silently produce the wrong answer. Both failures arise because `f_eval()` introduces ambiguity by looking in two places for each name: the supplied data and formula environment. 
 
 To make `threshold_x()` more reliable, we need to be more explicit by using the `.data` and `.env` pronouns:
 
@@ -494,7 +494,7 @@ mogrify <- function(`_df`, ...) {
 
 (NB: the first argument is a non-syntactic name (i.e. it requires quoting with `` ` ``) so it doesn't accidentally match one of the names of the new variables.)
 
-`transmogrifty()` makes it easy to add new variables to a data frame:
+`mogrifty()` makes it easy to add new variables to a data frame:
 
 ```{r}
 df <- data.frame(x = 1:5, y = sample(5))
@@ -530,7 +530,7 @@ mogrify <- function(`_df`, ...) {
 }
 ```
 
-`add_new()` becomes much simpler:
+`add_variable()` becomes much simpler:
 
 ```{r}
 add_variable <- function(df, name, expr) {
@@ -552,7 +552,7 @@ add_variable(df, "z", ~ x + y)
 
 In some situations you might want to eliminate the formula altogether, and allow the user to type expressions directly. I was once much enamoured with this approach (witness ggplot2, dplyr, ...). However, I now think that it should be used sparingly because explict quoting with `~` leads to simpler code, and makes it more clear to the user that something special is going on.
 
-That said, lazyeval does allow you to eliminate the `~` if you really want to. In this case, I recommend having both a NSE and SE version of the function. The SE version, which takes formuals, should have suffix `_`:
+That said, lazyeval does allow you to eliminate the `~` if you really want to. In this case, I recommend having both a NSE and SE version of the function. The SE version, which takes formulas, should have suffix `_`:
 
 ```{r}
 sieve_ <- function(df, condition) {
