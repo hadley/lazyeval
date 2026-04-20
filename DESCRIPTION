@@ -9,6 +9,8 @@ Authors@R: c(
     person("RStudio", role = "cph")
     )
 License: GPL-3
+URL: https://github.com/hadley/lazyeval
+BugReports: https://github.com/hadley/lazyeval/issues
 LazyData: true
 Depends:
     R (>= 3.1.0)
